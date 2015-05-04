@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 2.8)
+project( openimmersion )
+SET(COMPILE_DEFINITIONS -Wall -Wextra -Werror)
+include_directories(/opt/vc/include)
+include_directories(/opt/vc/userland-master/interface/vcos)
+include_directories(/opt/vc/userland-master)
+include_directories(/opt/vc/userland-master/interface/vcos/pthreads)
+include_directories(/opt/vc/userland-master/interface/vmcs_host/linux)
+include_directories(/opt/vc/userland-master/host_applications/linux/libs/bcm_host/include)
+link_directories(/opt/vc/lib)
+add_executable(get_image main.cpp camera.cpp cameracontrol.cpp graphics.cpp)
+
+target_link_libraries(get_image libmmal_core.so libmmal_util.so libmmal_vc_client.so libvcos.so libbcm_host.so GLESv2 EGL ${OpenCV_LIBS})
