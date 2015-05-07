@@ -16,7 +16,6 @@ int		main(void)
     namedWindow("edges",1);
 	while (42)
     {
-		cout << "frame" << endl;
         Mat frame;
         stream >> frame;
         cvtColor(frame, edges, CV_BGR2GRAY);
