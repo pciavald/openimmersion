@@ -1,2 +1,2 @@
 #!/bin/sh
-./build/simpletest_raspicam_cv
+./build/ocv_cam
