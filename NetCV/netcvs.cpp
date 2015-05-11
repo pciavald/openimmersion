@@ -72,6 +72,7 @@ void* streamServer(void* arg)
 	struct  sockaddr_in   serverAddr,  clientAddr;
 	socklen_t             clientAddrLen = sizeof(clientAddr);
 
+	(void)arg;
 	/* make this thread cancellable using pthread_cancel() */
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
