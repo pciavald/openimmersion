@@ -1,5 +1,6 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include <unistd.h>
 
 using namespace cv;
 using namespace std;
@@ -14,6 +15,7 @@ int		main(void)
     if(!stream.isOpened())
         return (-1);
     namedWindow("edges",1);
+	sleep(6);
 	while (42)
     {
         Mat frame;
