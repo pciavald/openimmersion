@@ -15,7 +15,6 @@ int		main(void)
     if(!stream.isOpened())
         return (-1);
     namedWindow("edges",1);
-	sleep(6);
 	while (42)
     {
         Mat frame;
