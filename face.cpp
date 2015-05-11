@@ -22,7 +22,8 @@ RNG rng(12345);
 /** @function main */
 int main( int argc, const char** argv )
 {
-	CvCapture* capture;
+	//CvCapture* capture;
+    VideoCapture	stream("/dev/stdin");
 	Mat frame;
 
 	//-- 1. Load the cascades
@@ -30,12 +31,14 @@ int main( int argc, const char** argv )
 	if( !eyes_cascade.load( eyes_cascade_name ) ){ printf("--(!)Error loading\n"); return -1; };
 
 	//-- 2. Read the video stream
-	capture = cvCaptureFromCAM( -1 );
-	if( capture )
+	//capture = cvCaptureFromCAM( -1 );
+    if(stream.isOpened())
+	//if( capture )
 	{
 		while( true )
 		{
-			frame = cvQueryFrame( capture );
+			//frame = cvQueryFrame( capture );
+			stream >> frame;
 
 			//-- 3. Apply the classifier to the frame
 			if( !frame.empty() )

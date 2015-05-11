@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
 project( OpenImmersion )
 find_package( OpenCV REQUIRED )
-add_executable( getvideo main.cpp )
-target_link_libraries( getvideo ${OpenCV_LIBS} )
+add_executable(face face.cpp )
+target_link_libraries(face ${OpenCV_LIBS} )
