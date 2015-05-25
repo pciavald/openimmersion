@@ -80,30 +80,28 @@ static int want_quit = 0;
 
 // Our application context passed around
 // the main routine and callback handlers
-typedef struct
-{
-	OMX_HANDLETYPE			camera;
-	OMX_BUFFERHEADERTYPE	*camera_ppBuffer_in;
-	OMX_BUFFERHEADERTYPE	*camera_ppBuffer_out;
-	int						camera_ready;
-	int						camera_output_buffer_available;
-	OMX_HANDLETYPE			null_sink;
-	int						flushed;
-	FILE					*fd_out;
-	VCOS_SEMAPHORE_T		handler_lock;
+typedef struct {
+	OMX_HANDLETYPE camera;
+	OMX_BUFFERHEADERTYPE *camera_ppBuffer_in;
+	OMX_BUFFERHEADERTYPE *camera_ppBuffer_out;
+	int camera_ready;
+	int camera_output_buffer_available;
+	OMX_HANDLETYPE null_sink;
+	int flushed;
+	FILE *fd_out;
+	VCOS_SEMAPHORE_T handler_lock;
 } appctx;
 
 // I420 frame stuff
-typedef struct
-{
-	int		width;
-	int		height;
-	size_t	size;
-	int		buf_stride;
-	int 	buf_slice_height;
-	int 	buf_extra_padding;
-	int 	p_offset[3];
-	int 	p_stride[3];
+typedef struct {
+	int width;
+	int height;
+	size_t size;
+	int buf_stride;
+	int buf_slice_height;
+	int buf_extra_padding;
+	int p_offset[3];
+	int p_stride[3];
 } i420_frame_info;
 
 // Stolen from video-info.c of gstreamer-plugins-base
@@ -129,7 +127,6 @@ static void get_i420_frame_info(int width, int height, int buf_stride, int buf_s
 		: -1;
 }
 
-// TODO
 // Ugly, stupid utility functions
 static void say(const char* message, ...) {
 	va_list args;
@@ -178,7 +175,6 @@ static void omx_die(OMX_ERRORTYPE error, const char* message, ...) {
 	die("OMX error: %s: 0x%08x %s", str, error, e);
 }
 
-//TODO
 static void dump_frame_info(const char *message, const i420_frame_info *info) {
 	say("%s frame info:\n"
 			"\tWidth:\t\t\t%d\n"
@@ -195,7 +191,6 @@ static void dump_frame_info(const char *message, const i420_frame_info *info) {
 			info->p_offset[0], info->p_offset[1], info->p_offset[2]);
 }
 
-// TODO
 static void dump_event(OMX_HANDLETYPE hComponent, OMX_EVENTTYPE eEvent, OMX_U32 nData1, OMX_U32 nData2) {
 	char *e;
 	switch(eEvent) {
@@ -211,7 +206,6 @@ static void dump_event(OMX_HANDLETYPE hComponent, OMX_EVENTTYPE eEvent, OMX_U32 
 			eEvent, e, hComponent, nData1, nData2);
 }
 
-//TODO
 static const char* dump_compression_format(OMX_VIDEO_CODINGTYPE c) {
 	char *f;
 	switch(c) {
@@ -241,8 +235,6 @@ static const char* dump_compression_format(OMX_VIDEO_CODINGTYPE c) {
 										 return f;
 	}
 }
-
-//TODO
 static const char* dump_color_format(OMX_COLOR_FORMATTYPE c) {
 	char *f;
 	switch(c) {
@@ -308,7 +300,6 @@ static const char* dump_color_format(OMX_COLOR_FORMATTYPE c) {
 	}
 }
 
-//TODO
 static void dump_portdef(OMX_PARAM_PORTDEFINITIONTYPE* portdef) {
 	say("Port %d is %s, %s, buffers wants:%d needs:%d, size:%d, pop:%d, aligned:%d",
 			portdef->nPortIndex,
@@ -366,7 +357,6 @@ static void dump_portdef(OMX_PARAM_PORTDEFINITIONTYPE* portdef) {
 	}
 }
 
-//TODO
 static void dump_port(OMX_HANDLETYPE hComponent, OMX_U32 nPortIndex, OMX_BOOL dumpformats) {
 	OMX_ERRORTYPE r;
 	OMX_PARAM_PORTDEFINITIONTYPE portdef;
@@ -847,10 +837,15 @@ int main(int argc, char **argv) {
 	signal(SIGTERM, signal_handler);
 	signal(SIGQUIT, signal_handler);
 
-	while (42)
-	{
-		if(ctx.camera_output_buffer_available)
-		{
+	while(1) {
+		// fill_output_buffer_done_handler() has marked that there's
+		// a buffer for us to flush
+		if(ctx.camera_output_buffer_available) {
+			// Print a message if the user wants to quit, but don't exit
+			// the loop until we are certain that we have processed
+			// a full frame till end of the frame. This way we should always
+			// avoid corruption of the last encoded at the expense of
+			// small delay in exiting.
 			if(want_quit && !quit_detected) {
 				say("Exit signal detected, waiting for next frame boundry before exiting...");
 				quit_detected = 1;
@@ -905,12 +900,12 @@ int main(int argc, char **argv) {
 			}
 			frame_bytes += buf_bytes_copied;
 			buf_num++;
-			//say("Read %d bytes from buffer %d of frame %d, copied %d bytes from %d Y spans and %d U/V spans available",
-			//		buf_size, buf_num, frame_num, buf_bytes_copied, valid_spans_y, valid_spans_uv);
+			say("Read %d bytes from buffer %d of frame %d, copied %d bytes from %d Y spans and %d U/V spans available",
+					buf_size, buf_num, frame_num, buf_bytes_copied, valid_spans_y, valid_spans_uv);
 			if(ctx.camera_ppBuffer_out->nFlags & OMX_BUFFERFLAG_ENDOFFRAME) {
 				// Dump the complete I420 frame
-				//say("Captured frame %d, %d packed bytes read, %d bytes unpacked, writing %d unpacked frame bytes",
-				//		frame_num, buf_bytes_read, frame_bytes, frame_info.size);
+				say("Captured frame %d, %d packed bytes read, %d bytes unpacked, writing %d unpacked frame bytes",
+						frame_num, buf_bytes_read, frame_bytes, frame_info.size);
 				if(frame_bytes != frame_info.size) {
 					die("Frame bytes read %d doesn't match the frame size %d",
 							frame_bytes, frame_info.size);
