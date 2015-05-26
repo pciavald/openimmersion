@@ -48,9 +48,9 @@
 #include <IL/OMX_Broadcom.h>
 
 // Hard coded parameters
-#define VIDEO_WIDTH                     1920
-#define VIDEO_HEIGHT                    1080
-#define VIDEO_FRAMERATE                 100
+#define VIDEO_WIDTH                     1920 / 4
+#define VIDEO_HEIGHT                    1080 / 4
+#define VIDEO_FRAMERATE                 30
 #define CAM_DEVICE_NUMBER               0
 #define CAM_SHARPNESS                   0                       // -100 .. 100
 #define CAM_CONTRAST                    0                       // -100 .. 100
@@ -74,6 +74,43 @@
 (a).nVersion.s.nVersionMinor = OMX_VERSION_MINOR; \
 (a).nVersion.s.nRevision = OMX_VERSION_REVISION; \
 (a).nVersion.s.nStep = OMX_VERSION_STEP
+
+#include <sys/time.h>
+#include <math.h>
+
+static void say(const char* message, ...);
+struct timeval tvBegin, tvEnd, tvDiff;
+
+int timeval_subtract(struct timeval *result, struct timeval *t2, struct timeval *t1)
+{
+	long int diff = (t2->tv_usec + 1000000 * t2->tv_sec) - (t1->tv_usec + 1000000 * t1->tv_sec);
+	result->tv_sec = diff / 1000000;
+	result->tv_usec = diff % 1000000;
+
+	return (diff<0);
+}
+
+void timeval_print(struct timeval *tv)
+{
+	char buffer[30];
+	time_t curtime;
+
+	printf("%ld.%06ld", tv->tv_sec, tv->tv_usec);
+	curtime = tv->tv_sec;
+	strftime(buffer, 30, "%m-%d-%Y  %T", localtime(&curtime));
+	printf(" = %s.%06ld\n", buffer, tv->tv_usec);
+}
+// buffer use
+int used = 0;
+static void use_buffer(char* buf)
+{
+	gettimeofday(&tvEnd, NULL);
+	timeval_subtract(&tvDiff, &tvEnd, &tvBegin);
+	say("%ld.%06ld\n", tvDiff.tv_sec, tvDiff.tv_usec);
+	gettimeofday(&tvBegin, NULL);
+	if (used++ == 10)
+		fprintf(stdout, buf);
+}
 
 // Global variable used by the signal handler and capture loop
 static int want_quit = 0;
@@ -526,6 +563,7 @@ static OMX_ERRORTYPE fill_output_buffer_done_handler(
 }
 
 int main(int argc, char **argv) {
+	gettimeofday(&tvBegin, NULL);
 	bcm_host_init();
 
 	OMX_ERRORTYPE r;
@@ -837,15 +875,10 @@ int main(int argc, char **argv) {
 	signal(SIGTERM, signal_handler);
 	signal(SIGQUIT, signal_handler);
 
-	while(1) {
-		// fill_output_buffer_done_handler() has marked that there's
-		// a buffer for us to flush
-		if(ctx.camera_output_buffer_available) {
-			// Print a message if the user wants to quit, but don't exit
-			// the loop until we are certain that we have processed
-			// a full frame till end of the frame. This way we should always
-			// avoid corruption of the last encoded at the expense of
-			// small delay in exiting.
+	while(1)
+	{
+		if(ctx.camera_output_buffer_available)
+		{
 			if(want_quit && !quit_detected) {
 				say("Exit signal detected, waiting for next frame boundry before exiting...");
 				quit_detected = 1;
@@ -857,64 +890,41 @@ int main(int argc, char **argv) {
 				say("Frame boundry reached, exiting loop...");
 				break;
 			}
-			// Start of the OMX buffer data
-			buf_start = ctx.camera_ppBuffer_out->pBuffer
-				+ ctx.camera_ppBuffer_out->nOffset;
-			// Size of the OMX buffer data;
+			buf_start = ctx.camera_ppBuffer_out->pBuffer + ctx.camera_ppBuffer_out->nOffset;
 			buf_size = ctx.camera_ppBuffer_out->nFilledLen;
 			buf_bytes_read += buf_size;
 			buf_bytes_copied = 0;
-			// Detect the possibly non-full buffer in the last buffer of a frame
 			valid_spans_y = max_spans_y
 				- ((ctx.camera_ppBuffer_out->nFlags & OMX_BUFFERFLAG_ENDOFFRAME)
 						? frame_info.buf_extra_padding
 						: 0);
-			// I420 spec: U and V plane span size half of the size of the Y plane span size
 			valid_spans_uv = valid_spans_y / 2;
-			// Unpack Y, U, and V plane spans from the buffer to the I420 frame
-			for(i = 0; i < 3; i++) {
-				// Number of maximum and valid spans for this plane
+			for(i = 0; i < 3; i++)
+			{
 				max_spans   = (i == 0 ? max_spans_y   : max_spans_uv);
 				valid_spans = (i == 0 ? valid_spans_y : valid_spans_uv);
 				dst_offset =
-					// Start of the plane span in the I420 frame
 					frame_info.p_offset[i] +
-					// Plane spans copied from the previous buffers
 					(buf_num * frame_info.p_stride[i] * max_spans);
 				src_offset =
-					// Start of the plane span in the buffer
 					buf_info.p_offset[i];
 				span_size =
-					// Plane span size multiplied by the available spans in the buffer
 					frame_info.p_stride[i] * valid_spans;
 				memcpy(
-						// Destination starts from the beginning of the frame and move forward by offset
 						frame + dst_offset,
-						// Source starts from the beginning of the OMX component buffer and move forward by offset
 						buf_start + src_offset,
-						// The final plane span size, possible padding at the end of
-						// the plane span section in the buffer isn't included
-						// since the size is based on the final frame plane span size
 						span_size);
 				buf_bytes_copied += span_size;
 			}
 			frame_bytes += buf_bytes_copied;
 			buf_num++;
-			say("Read %d bytes from buffer %d of frame %d, copied %d bytes from %d Y spans and %d U/V spans available",
-					buf_size, buf_num, frame_num, buf_bytes_copied, valid_spans_y, valid_spans_uv);
-			if(ctx.camera_ppBuffer_out->nFlags & OMX_BUFFERFLAG_ENDOFFRAME) {
-				// Dump the complete I420 frame
-				say("Captured frame %d, %d packed bytes read, %d bytes unpacked, writing %d unpacked frame bytes",
-						frame_num, buf_bytes_read, frame_bytes, frame_info.size);
+			if(ctx.camera_ppBuffer_out->nFlags & OMX_BUFFERFLAG_ENDOFFRAME)
+			{
 				if(frame_bytes != frame_info.size) {
 					die("Frame bytes read %d doesn't match the frame size %d",
 							frame_bytes, frame_info.size);
 				}
-				output_written = fwrite(frame, 1, frame_info.size, ctx.fd_out);
-				if(output_written != frame_info.size) {
-					die("Failed to write to output file: Requested to write %d bytes, but only %d bytes written: %s",
-							frame_info.size, output_written, strerror(errno));
-				}
+				use_buffer(frame);
 				frame_num++;
 				buf_num = 0;
 				buf_bytes_read = 0;
@@ -923,7 +933,6 @@ int main(int argc, char **argv) {
 			}
 			need_next_buffer_to_be_filled = 1;
 		}
-		// Buffer flushed, request a new buffer to be filled by the camera component
 		if(need_next_buffer_to_be_filled) {
 			need_next_buffer_to_be_filled = 0;
 			ctx.camera_output_buffer_available = 0;
@@ -931,7 +940,6 @@ int main(int argc, char **argv) {
 				omx_die(r, "Failed to request filling of the output buffer on camera video output port 71");
 			}
 		}
-		// Would be better to use signaling here but hey this works too
 		usleep(10);
 	}
 	say("Cleaning up...");

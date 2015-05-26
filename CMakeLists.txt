@@ -42,7 +42,7 @@ link_directories(
 	"/opt/vc/lib"
 	)
 
-add_executable(get_image get_image.c)
+add_executable(get_image clean.c)
 
 target_link_libraries(get_image
 	openmaxil
