@@ -18,6 +18,8 @@
 
 #define CAMERA		MMAL_COMPONENT_DEFAULT_CAMERA
 #define PREVIEW		MMAL_COMPONENT_DEFAULT_VIDEO_RENDERER
+#define I420		MMAL_ENCODING_I420
+#define OPAQUE		MMAL_ENCODING_OPAQUE
 
 #define MMAL_CAMERA_PREVIEW_PORT	0
 #define MMAL_CAMERA_VIDEO_PORT		1
@@ -41,6 +43,7 @@ MMAL_STATUS_T	g_status;
 /* mmal.c */
 void	create_component(const char * name, MMAL_COMPONENT_T ** c, char * msg);
 void	enable_component(MMAL_COMPONENT_T * component, char * msg);
+void	start_capture(void);
 void	create_pool_on_port(
 		MMAL_POOL_T **		pool,
 		MMAL_PORT_T *		port,
@@ -49,11 +52,14 @@ void	create_pool_on_port(
 
 /* setup.c */
 void	configure_camera(MMAL_COMPONENT_T * camera);
+void	configure_preview_input(void);
 void	commit_port(
 		MMAL_PORT_T *	port,
 		MMAL_FOURCC_T	encoding,
 		unsigned int	headers,
 		char *			msg);
+void	fetch_ports(MMAL_COMPONENT_T * camera);
+void	flush_buffers(void);
 
 /* debug.c */
 void	check(int status, const char * func, int line, char * msg);

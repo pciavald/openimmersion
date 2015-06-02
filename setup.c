@@ -62,3 +62,31 @@ void	commit_port(
 	g_status = mmal_port_format_commit(port);
 	check(g_status, __func__, __LINE__, msg);
 }
+
+void	fetch_ports(MMAL_COMPONENT_T * camera)
+{
+	if (g_data.camera->port_num)
+	{
+		g_data.camera_preview_port	= camera->output[MMAL_CAMERA_PREVIEW_PORT];
+		g_data.camera_video_port	= camera->output[MMAL_CAMERA_VIDEO_PORT];
+	}
+	else
+		check(-1, __func__, __LINE__, "camera has no ports");
+}
+
+void	flush_buffers(void)
+{
+	MMAL_BUFFER_HEADER_T *	buffer;
+	int						size;
+	int						i;
+
+	size = mmal_queue_length(g_data.camera_video_port_pool->queue);
+	for (i = 0; i < size; i++)
+	{
+		buffer = mmal_queue_get(g_data.camera_video_port_pool->queue);
+		if (buffer == NULL)
+			check(-1, __func__, __LINE__, "flushing buffers");
+		g_status = mmal_port_send_buffer(g_data.camera_video_port, buffer);
+		check(g_status, __func__, __LINE__, "sending flushed buffers");
+	}
+}

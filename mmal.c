@@ -12,6 +12,14 @@ void	enable_component(MMAL_COMPONENT_T * component, char * msg)
 	check(g_status, __func__, __LINE__, msg);
 }
 
+void	start_capture(void)
+{
+	MMAL_PORT_T *	video = g_data.camera_video_port;
+
+	g_status = mmal_port_parameter_set_boolean(video, MMAL_PARAMETER_CAPTURE, 1);
+	check(g_status, __func__, __LINE__, "starting capture");
+}
+
 void	create_pool_on_port(
 		MMAL_POOL_T **		pool,
 		MMAL_PORT_T *		port,
