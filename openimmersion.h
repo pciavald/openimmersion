@@ -49,8 +49,11 @@ void	create_pool_on_port(
 
 /* setup.c */
 void	configure_camera(MMAL_COMPONENT_T * camera);
-void	set_preview_port(MMAL_PORT_T * camera_preview_port);
-void	set_video_port(MMAL_PORT_T * camera_video_port);
+void	commit_port(
+		MMAL_PORT_T *	port,
+		MMAL_FOURCC_T	encoding,
+		unsigned int	headers,
+		char *			msg);
 
 /* debug.c */
 void	check(int status, const char * func, int line, char * msg);

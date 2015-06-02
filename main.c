@@ -16,23 +16,20 @@ void	init_camera(void)
 	create_component(CAMERA, &(g_data.camera), "camera");
 	fetch_ports(g_data.camera);
 	configure_camera(g_data.camera);
-
-	set_preview_port(g_data.camera_preview_port);
-	set_video_port(g_data.camera_video_port);
-
+	commit_port(g_data.camera_preview_port, MMAL_ENCODING_I420, 2, "preview");
+	commit_port(g_data.camera_video_port, MMAL_ENCODING_OPAQUE, 2, "video");
 	create_pool_on_port(
 			&(g_data.camera_video_port_pool),
 			g_data.camera_video_port,
 			video_buffer_callback,
 			"video");
-
 	enable_component(g_data.camera, "camera");
 }
 
 int		main(int argc, char ** argv)
 {
-	printf("lol\n");
 	MMAL_ES_FORMAT_T *		format;
+
 	bcm_host_init();
 	bzero((void *)&g_data, sizeof (g_data));
 
@@ -40,35 +37,13 @@ int		main(int argc, char ** argv)
 
 	create_component(PREVIEW, &(g_data.preview), "preview");
 
-	g_data.preview_input_port = g_data.preview->input[0];
-	{
-		MMAL_DISPLAYREGION_T	param;
-		param.hdr.id		= MMAL_PARAMETER_DISPLAYREGION;
-		param.hdr.size		= sizeof (MMAL_DISPLAYREGION_T);
-		param.set			= MMAL_DISPLAY_SET_LAYER;
-		param.layer			= 0;
-		param.set			|= MMAL_DISPLAY_SET_FULLSCREEN;
-		param.fullscreen	= 1;
-		g_status = mmal_port_parameter_set(g_data.preview_input_port, &param.hdr);
-		check(g_status, __func__, __LINE__, "could not set preview parameters");
-	}
-	mmal_format_copy(g_data.preview_input_port->format, g_data.camera_video_port->format);
+	configure_preview_input();
 
-	format = g_data.preview_input_port->format;
-	format->encoding					= MMAL_ENCODING_I420;
-	format->encoding_variant			= MMAL_ENCODING_I420;
-	format->es->video.width				= WIDTH;
-	format->es->video.height			= HEIGHT;
-	format->es->video.crop.x			= 0;
-	format->es->video.crop.y			= 0;
-	format->es->video.crop.width		= WIDTH;
-	format->es->video.crop.height		= HEIGHT;
-	format->es->video.frame_rate.num	= FPS;
-	format->es->video.frame_rate.den	= 1;
-	g_data.preview_input_port->buffer_size = g_data.camera_video_port->buffer_size_recommended;
-	g_data.preview_input_port->buffer_num = 4;
-	g_status = mmal_port_format_commit(g_data.preview_input_port);
-	check(g_status, __func__, __LINE__, "could not commit preview input format");
+	commit_port(
+			g_data.preview_input_port,
+			MMAL_ENCODING_I420,
+			4,
+			"preview_input");
 
 	create_pool_on_port(
 			&(g_data.preview_input_port_pool),
