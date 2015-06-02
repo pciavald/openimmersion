@@ -39,11 +39,13 @@ typedef struct				s_data
 
 t_data			g_data;
 MMAL_STATUS_T	g_status;
+int				g_stop;
 
 /* mmal.c */
 void	create_component(const char * name, MMAL_COMPONENT_T ** c, char * msg);
 void	enable_component(MMAL_COMPONENT_T * component, char * msg);
 void	start_capture(void);
+void	stop_capture(void);
 void	create_pool_on_port(
 		MMAL_POOL_T **		pool,
 		MMAL_PORT_T *		port,

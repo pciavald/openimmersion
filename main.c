@@ -28,13 +28,23 @@ void	init_preview(void)
 	flush_buffers();
 }
 
+void	sig_handler(int sig)
+{
+	(void)sig;
+	stop_capture();
+	fprintf(stderr, "successfully destroyed all components, leaving.\n");
+	exit(0);
+}
+
 int		main(int argc, char ** argv)
 {
+	g_stop = 0;
 	bcm_host_init();
 	bzero((void *)&g_data, sizeof (g_data));
 	init_camera();
 	init_preview();
 	start_capture();
+	signal(SIGINT, sig_handler);
 	while (42)
 		;
 	return (0);

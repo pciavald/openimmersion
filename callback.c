@@ -25,12 +25,15 @@ void	video_buffer_callback(MMAL_PORT_T * port, MMAL_BUFFER_HEADER_T * buffer)
 	MMAL_POOL_T *	preview_pool	= g_data.preview_input_port_pool;
 	MMAL_PORT_T *	preview_port	= g_data.preview_input_port;
 
-	print_time(frame, mesure_time(frame), buffer->length);
-	frame++;
-	use_buffer(buffer->data, buffer->length, frame);
-	mmal_buffer_header_release(buffer);
-	send_new_buffer_to_port(pool, port);
-	send_new_buffer_to_port(preview_pool, preview_port);
+	if (g_stop == 0)
+	{
+		print_time(frame, mesure_time(frame), buffer->length);
+		frame++;
+		use_buffer(buffer->data, buffer->length, frame);
+		mmal_buffer_header_release(buffer);
+		send_new_buffer_to_port(pool, port);
+		send_new_buffer_to_port(preview_pool, preview_port);
+	}
 }
 
 void	preview_buffer_callback(
