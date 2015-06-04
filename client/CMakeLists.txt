@@ -1,7 +1,7 @@
-cmake_minimum_required (VERSION 2.6)
-project (OpenImmersion)
-set (Tutorial_VERSION_MAJOR 0)
-set (Tutorial_VERSION_MINOR 1)
+cmake_minimum_required	(VERSION 2.6)
+project					(OpenImmersion)
+set						(VERSION_MAJOR 0)
+set						(VERSION_MINOR 1)
 
 set(CMAKE_CXX_FLAGS "
 	-Wall
@@ -10,7 +10,7 @@ set(CMAKE_CXX_FLAGS "
 	")
 
 include_directories(
-	"${PROJECT_BINARY_DIR}"
+	"${CMAKE_CURRENT_SOURCE_DIR}/inc"
 	"/opt/vc/userland-master/"
 	"/opt/vc/userland-master/build/inc/interface/vcos/"
 	"/opt/vc/userland-master/host_applications/linux/apps/raspicam/"
@@ -25,13 +25,13 @@ link_directories(
 	)
 
 add_executable(			client
-	src/client/debug.c
-	src/client/callback.c
-	src/client/setup.c
-	src/client/init.c
-	src/client/mmal.c
-	src/client/client.c
-	src/client/main.c
+	src/debug.c
+	src/callback.c
+	src/setup.c
+	src/init.c
+	src/mmal.c
+	src/client.c
+	src/main.c
 	)
 
 target_link_libraries(	client
