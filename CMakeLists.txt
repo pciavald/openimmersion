@@ -25,13 +25,13 @@ link_directories(
 	)
 
 add_executable(			client
-	src/debug.c
-	src/callback.c
-	src/setup.c
-	src/init.c
-	src/mmal.c
-	src/client.c
-	src/main.c
+	src/client/debug.c
+	src/client/callback.c
+	src/client/setup.c
+	src/client/init.c
+	src/client/mmal.c
+	src/client/client.c
+	src/client/main.c
 	)
 
 target_link_libraries(	client
