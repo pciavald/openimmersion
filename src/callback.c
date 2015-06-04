@@ -27,7 +27,7 @@ void	video_buffer_callback(MMAL_PORT_T * port, MMAL_BUFFER_HEADER_T * buffer)
 
 	if (g_stop == 0)
 	{
-		update_fps(frame);
+		update_fps();
 		frame++;
 		use_buffer(buffer->data, buffer->length, frame);
 		mmal_buffer_header_release(buffer);

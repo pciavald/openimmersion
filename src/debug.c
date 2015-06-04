@@ -35,19 +35,19 @@ void	dump(uint8_t * data, uint32_t length)
 	fprintf(stderr, "dumped\n");
 }
 
-void	update_fps(int frame)
+void	update_fps(void)
 {
-	if (frame % 30 == 0)
-	{
-		static struct timespec	t1;
-		struct timespec 		t2;
-		int						d;
+	static int		count = 0;
+	static time_t	t1;
+	time_t			t2;
 
-		if (frame == 0)
-			clock_gettime(CLOCK_MONOTONIC, &t1);
-		clock_gettime(CLOCK_MONOTONIC, &t2);
-		d = t2.tv_sec - t1.tv_sec;
-		g_data.fps = frame / (d + 1);
-		fprintf(stderr, "%i fps\n", g_data.fps);
+	if (count == 0)
+		time(&t1);
+	time(&t2);
+	count++;
+	if (t2 > t1)
+	{
+		g_data.fps = count;
+		count = 0;
 	}
 }
