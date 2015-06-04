@@ -2,7 +2,7 @@
 
 static void		use_buffer(uint8_t * data, uint32_t length, int frame)
 {
-	if (frame == 500)
+	if (frame == -1)
 		dump(data, length);
 }
 
@@ -27,7 +27,7 @@ void	video_buffer_callback(MMAL_PORT_T * port, MMAL_BUFFER_HEADER_T * buffer)
 
 	if (g_stop == 0)
 	{
-		print_time(frame);
+		update_fps(frame);
 		frame++;
 		use_buffer(buffer->data, buffer->length, frame);
 		mmal_buffer_header_release(buffer);
@@ -36,9 +36,7 @@ void	video_buffer_callback(MMAL_PORT_T * port, MMAL_BUFFER_HEADER_T * buffer)
 	}
 }
 
-void	preview_buffer_callback(
-		MMAL_PORT_T * port,
-		MMAL_BUFFER_HEADER_T * buffer)
+void	preview_buffer_callback(MMAL_PORT_T * port, MMAL_BUFFER_HEADER_T * buffer)
 {
 	(void)port;
 	mmal_buffer_header_release(buffer);

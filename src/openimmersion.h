@@ -17,7 +17,7 @@
 
 #define WIDTH			640
 #define HEIGHT			480
-#define FPS				90
+#define FPS				80
 
 #define SERVER_NAME		"stealth-debian"
 #define SERVER_PORT		42000
@@ -41,6 +41,7 @@ typedef struct				s_data
 	MMAL_PORT_T *			preview_input_port;
 	MMAL_POOL_T *			preview_input_port_pool;
 	int						server;
+	int						fps;
 }							t_data;
 
 t_data			g_data;
@@ -82,14 +83,10 @@ void	init_preview(void);
 void	sig_handler(int sig);
 void	check(int status, const char * func, int line, char * msg);
 void	dump(uint8_t * data, uint32_t length);
-void	print_time(int frame);
+void	update_fps(int frame);
 
 /* callback.c */
-void	video_buffer_callback(
-		MMAL_PORT_T *			port,
-		MMAL_BUFFER_HEADER_T *	buffer);
-void	preview_buffer_callback(
-		MMAL_PORT_T *			port,
-		MMAL_BUFFER_HEADER_T *	buffer);
+void	video_buffer_callback(MMAL_PORT_T * port, MMAL_BUFFER_HEADER_T * buffer);
+void	preview_buffer_callback(MMAL_PORT_T * port, MMAL_BUFFER_HEADER_T * buffer);
 
 #endif
