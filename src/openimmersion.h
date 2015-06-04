@@ -9,17 +9,23 @@
 #include "interface/vcos/vcos.h"
 
 #include "interface/mmal/mmal.h"
+#include "interface/mmal/mmal_pool.h"
 #include "interface/mmal/util/mmal_default_components.h"
 #include "interface/mmal/util/mmal_connection.h"
+#include "interface/mmal/util/mmal_util.h"
+#include "interface/mmal/util/mmal_util_params.h"
 
-#define WIDTH		640
-#define HEIGHT		480
-#define FPS			90
+#define WIDTH			640
+#define HEIGHT			480
+#define FPS				90
 
-#define CAMERA		MMAL_COMPONENT_DEFAULT_CAMERA
-#define PREVIEW		MMAL_COMPONENT_DEFAULT_VIDEO_RENDERER
-#define I420		MMAL_ENCODING_I420
-#define OPAQUE		MMAL_ENCODING_OPAQUE
+#define SERVER_NAME		"stealth-debian"
+#define SERVER_PORT		42000
+
+#define CAMERA			MMAL_COMPONENT_DEFAULT_CAMERA
+#define PREVIEW			MMAL_COMPONENT_DEFAULT_VIDEO_RENDERER
+#define I420			MMAL_ENCODING_I420
+#define OPAQUE			MMAL_ENCODING_OPAQUE
 
 #define MMAL_CAMERA_PREVIEW_PORT	0
 #define MMAL_CAMERA_VIDEO_PORT		1
@@ -34,12 +40,15 @@ typedef struct				s_data
 	MMAL_PORT_T *			camera_preview_port;
 	MMAL_PORT_T *			preview_input_port;
 	MMAL_POOL_T *			preview_input_port_pool;
-	MMAL_CONNECTION_T *		camera_preview_connection;
+	int						server;
 }							t_data;
 
 t_data			g_data;
 MMAL_STATUS_T	g_status;
 int				g_stop;
+
+/* client.c */
+void	init_client(char * name, int port);
 
 /* mmal.c */
 void	create_component(const char * name, MMAL_COMPONENT_T ** c, char * msg);
@@ -63,9 +72,17 @@ void	commit_port(
 void	fetch_ports(MMAL_COMPONENT_T * camera);
 void	flush_buffers(void);
 
+/* init.c */
+
+void	init(void);
+void	init_camera(void);
+void	init_preview(void);
+
 /* debug.c */
+void	sig_handler(int sig);
 void	check(int status, const char * func, int line, char * msg);
 void	dump(uint8_t * data, uint32_t length);
+void	print_time(int frame);
 
 /* callback.c */
 void	video_buffer_callback(

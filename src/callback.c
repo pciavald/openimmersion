@@ -27,7 +27,7 @@ void	video_buffer_callback(MMAL_PORT_T * port, MMAL_BUFFER_HEADER_T * buffer)
 
 	if (g_stop == 0)
 	{
-		print_time(frame, mesure_time(frame), buffer->length);
+		print_time(frame);
 		frame++;
 		use_buffer(buffer->data, buffer->length, frame);
 		mmal_buffer_header_release(buffer);
@@ -40,5 +40,6 @@ void	preview_buffer_callback(
 		MMAL_PORT_T * port,
 		MMAL_BUFFER_HEADER_T * buffer)
 {
+	(void)port;
 	mmal_buffer_header_release(buffer);
 }

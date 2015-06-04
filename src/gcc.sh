@@ -22,9 +22,14 @@ gcc \
 	-lrt \
 	\
 	-g \
+	-Wall \
+	-Wextra \
+	-Werror \
 	\
 	debug.c \
 	callback.c \
 	setup.c \
+	init.c \
 	mmal.c \
+	client.c \
 	main.c
