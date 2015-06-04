@@ -45,7 +45,7 @@ typedef struct				s_data
 }							t_data;
 
 t_data			g_data;
-MMAL_STATUS_T	g_status;
+int				g_status;
 int				g_stop;
 
 /* client.c */

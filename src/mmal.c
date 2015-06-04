@@ -32,11 +32,11 @@ void	stop_capture(void)
 	g_stop = 1;
 	g_status = mmal_port_parameter_set_boolean(video, MMAL_PARAMETER_CAPTURE, 0);
 	check(g_status, __func__, __LINE__, "starting capture");
-	g_status = mmal_port_disable(g_data.camera_video_port);
-	check(g_status, __func__, __LINE__, "disable camera video port");
-	mmal_port_pool_destroy(
-			g_data.camera_video_port,
-			g_data.camera_video_port_pool);
+	//g_status = mmal_port_disable(g_data.camera_video_port);
+	//check(g_status, __func__, __LINE__, "disable camera video port");
+	//mmal_port_pool_destroy(
+	//		g_data.camera_video_port,
+	//		g_data.camera_video_port_pool);
 	g_status = mmal_port_disable(g_data.preview_input_port);
 	check(g_status, __func__, __LINE__, "disable preview input port");
 	mmal_port_pool_destroy(
@@ -48,8 +48,8 @@ void	stop_capture(void)
 	check(g_status, __func__, __LINE__, "disable camera");
 	g_status = mmal_component_destroy(g_data.preview);
 	check(g_status, __func__, __LINE__, "destroy preview");
-	g_status = mmal_component_destroy(g_data.camera);
-	check(g_status, __func__, __LINE__, "destroy camera");
+	//g_status = mmal_component_destroy(g_data.camera);
+	//check(g_status, __func__, __LINE__, "destroy camera");
 }
 
 void	create_pool_on_port(

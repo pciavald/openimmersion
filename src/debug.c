@@ -49,5 +49,6 @@ void	update_fps(void)
 	{
 		g_data.fps = count;
 		count = 0;
+		fprintf(stderr, "%i\n", g_data.fps);
 	}
 }

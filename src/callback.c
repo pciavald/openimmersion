@@ -1,9 +1,34 @@
 #include "openimmersion.h"
+#include <sys/socket.h>
 
-static void		use_buffer(uint8_t * data, uint32_t length, int frame)
+static void		send_buffer(void * data, size_t length)
 {
+	g_status = send(g_data.server, data, length, 0);
+	check(g_status < 0 ? -1 : 0, __func__, __LINE__, "sending data");
+}
+
+static void		use_buffer(uint8_t * buffer, uint32_t buffer_length, int frame)
+{
+	size_t		data_length = 64 * 48;
+	char		data[data_length];
+
+	// dump a YUV frame
 	if (frame == -1)
-		dump(data, length);
+		dump(buffer, buffer_length);
+
+	memset(data, data_length, '\0');
+	/*
+	 * process buffer here
+	 * output data in &data
+	 * set length of data_length
+	 */
+
+	// test
+	size_t i;
+	for (i = 0; i < data_length; i++)
+		data[i] = (i % 26) + 'a';
+
+	send_buffer(data, data_length);
 }
 
 static void		send_new_buffer_to_port(MMAL_POOL_T * pool, MMAL_PORT_T * port)
