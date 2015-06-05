@@ -8,6 +8,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <signal.h>
+#include <time.h>
 
 typedef struct sockaddr_in		t_sockaddr_in;
 
