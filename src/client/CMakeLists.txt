@@ -10,7 +10,7 @@ set(CMAKE_CXX_FLAGS "
 	")
 
 include_directories(
-	"${CMAKE_CURRENT_SOURCE_DIR}/inc"
+	"${CMAKE_CURRENT_SOURCE_DIR}/include"
 	"/opt/vc/userland-master/"
 	"/opt/vc/userland-master/build/inc/interface/vcos/"
 	"/opt/vc/userland-master/host_applications/linux/apps/raspicam/"
