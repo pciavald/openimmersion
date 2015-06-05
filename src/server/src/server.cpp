@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "Socket.hpp"
+
 #define PORT	42000
 
 void	sig_handler(int val)
@@ -29,6 +31,7 @@ void	init(void)
 
 int		main(void)
 {
+	Socket		s;
 	init();
 	return (0);
 }

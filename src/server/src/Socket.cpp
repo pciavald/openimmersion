@@ -60,3 +60,7 @@ Socket::Socket(void)
 	wait_for_peers(_fd, fds, addrs);
 	set_clients(fds, addrs);
 }
+
+Socket::~Socket(void)
+{
+}
