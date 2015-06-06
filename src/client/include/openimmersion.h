@@ -19,7 +19,7 @@
 #define HEIGHT			480
 #define FPS				90
 
-#define SERVER_NAME		"stealth-debian"
+#define SERVER_NAME		"stealth-ubuntu"
 #define SERVER_PORT		42000
 
 #define CAMERA			MMAL_COMPONENT_DEFAULT_CAMERA
