@@ -37,7 +37,7 @@ static void		lookup_host(t_sockaddr_in * addr, char * name, int port)
 	addr->sin_addr = ((t_sockaddr_in *)res->ai_addr)->sin_addr;
 
 	inet_ntop (res->ai_family, &(addr->sin_addr), addrstr, 100);
-	printf ("server address: %s:%i (%s)\n", addrstr, port, res->ai_canonname);
+	fprintf(stderr, "server address: %s:%i (%s)\n", addrstr, port, res->ai_canonname);
 }
 
 void	init_client(char * name, int port)

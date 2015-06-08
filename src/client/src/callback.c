@@ -13,7 +13,7 @@ static void		use_buffer(uint8_t * buffer, uint32_t buffer_length, int frame)
 	char		data[data_length];
 
 	// dump a YUV frame
-	if (frame == -1)
+	if (frame == 300)
 		dump(buffer, buffer_length);
 
 	memset(data, data_length, '\0');
@@ -28,7 +28,7 @@ static void		use_buffer(uint8_t * buffer, uint32_t buffer_length, int frame)
 	for (i = 0; i < data_length; i++)
 		data[i] = (i % 26) + 'a';
 
-	send_buffer(data, data_length);
+	//send_buffer(data, data_length);
 }
 
 static void		send_new_buffer_to_port(MMAL_POOL_T * pool, MMAL_PORT_T * port)

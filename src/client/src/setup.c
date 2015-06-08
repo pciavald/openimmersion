@@ -38,31 +38,6 @@ void	configure_preview_input(void)
 	mmal_format_copy(input_format, video_format);
 }
 
-void	commit_port(
-		MMAL_PORT_T *	port,
-		MMAL_FOURCC_T	encoding,
-		unsigned int	headers,
-		char *			msg)
-{
-	MMAL_ES_FORMAT_T *	format;
-
-	format = port->format;
-	format->encoding					= encoding;
-	format->encoding_variant			= MMAL_ENCODING_I420;
-	format->es->video.width				= WIDTH;
-	format->es->video.height			= HEIGHT;
-	format->es->video.crop.x			= 0;
-	format->es->video.crop.y			= 0;
-	format->es->video.crop.width		= WIDTH;
-	format->es->video.crop.height		= HEIGHT;
-	format->es->video.frame_rate.num	= FPS;
-	format->es->video.frame_rate.den	= 1;
-	port->buffer_size					= port->buffer_size_recommended;
-	port->buffer_num					= headers;
-	g_status = mmal_port_format_commit(port);
-	check(g_status, __func__, __LINE__, msg);
-}
-
 void	fetch_ports(MMAL_COMPONENT_T * camera)
 {
 	if (g_data.camera->port_num)
