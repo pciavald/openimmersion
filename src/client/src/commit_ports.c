@@ -6,7 +6,7 @@ void	set_preview_port(MMAL_PORT_T * camera_preview_port)
 
 	format = camera_preview_port->format;
 	format->encoding				= MMAL_ENCODING_OPAQUE;
-	format->encoding_variant		= MMAL_ENCODING_I420;
+	format->encoding_variant		= MMAL_ENCODING_RGB24;
 	format->es->video.width			= WIDTH;
 	format->es->video.height		= HEIGHT;
 	format->es->video.crop.x		= 0;
@@ -22,8 +22,8 @@ void	set_video_port(MMAL_PORT_T * camera_video_port)
 	MMAL_ES_FORMAT_T *		format;
 
 	format = camera_video_port->format;
-	format->encoding					= MMAL_ENCODING_I420;
-	format->encoding_variant			= MMAL_ENCODING_I420;
+	format->encoding					= MMAL_ENCODING_RGB24;
+	format->encoding_variant			= MMAL_ENCODING_RGB24;
 	format->es->video.width				= WIDTH;
 	format->es->video.height			= HEIGHT;
 	format->es->video.crop.x			= 0;
@@ -43,8 +43,8 @@ void	set_preview_input_port(void)
 	MMAL_ES_FORMAT_T *		format;
 
 	format = g_data.preview_input_port->format;
-	format->encoding					= MMAL_ENCODING_I420;
-	format->encoding_variant			= MMAL_ENCODING_I420;
+	format->encoding					= MMAL_ENCODING_RGB24;
+	format->encoding_variant			= MMAL_ENCODING_RGB24;
 	format->es->video.width				= WIDTH;
 	format->es->video.height			= HEIGHT;
 	format->es->video.crop.x			= 0;
