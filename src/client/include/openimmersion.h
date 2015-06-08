@@ -48,6 +48,11 @@ t_data			g_data;
 int				g_status;
 int				g_stop;
 
+/* commit_ports.c */
+void	set_preview_port(MMAL_PORT_T * camera_preview_port);
+void	set_video_port(MMAL_PORT_T * camera_video_port);
+void	set_preview_input_port(void);
+
 /* client.c */
 void	init_client(char * name, int port);
 
@@ -65,11 +70,6 @@ void	create_pool_on_port(
 /* setup.c */
 void	configure_camera(MMAL_COMPONENT_T * camera);
 void	configure_preview_input(void);
-void	commit_port(
-		MMAL_PORT_T *	port,
-		MMAL_FOURCC_T	encoding,
-		unsigned int	headers,
-		char *			msg);
 void	fetch_ports(MMAL_COMPONENT_T * camera);
 void	flush_buffers(void);
 

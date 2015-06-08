@@ -16,8 +16,8 @@ void	init_camera(void)
 	create_component(CAMERA, &(g_data.camera), "camera");
 	fetch_ports(g_data.camera);
 	configure_camera(g_data.camera);
-	commit_port(g_data.camera_preview_port, I420, 2, "preview");
-	commit_port(g_data.camera_video_port, OPAQUE, 2, "video");
+	set_preview_port(g_data.camera_preview_port);
+	set_video_port(g_data.camera_video_port);
 	create_pool_on_port(
 			&(g_data.camera_video_port_pool),
 			g_data.camera_video_port,
@@ -31,7 +31,7 @@ void	init_preview(void)
 	fprintf(stderr, "initializing preview\n");
 	create_component(PREVIEW, &(g_data.preview), "preview");
 	configure_preview_input();
-	commit_port(g_data.preview_input_port, I420, 4, "preview_input");
+	set_preview_input_port();
 	create_pool_on_port(
 			&(g_data.preview_input_port_pool),
 			g_data.preview_input_port,
