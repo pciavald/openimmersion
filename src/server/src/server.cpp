@@ -31,6 +31,7 @@ void	init(void)
 
 void	dump(Socket & s, int c)
 {
+	int		i = 0;
 	int		n;
 	char	buff[BUFF_SIZE];
 
@@ -38,7 +39,9 @@ void	dump(Socket & s, int c)
 	while ((n = read(s.getClients()[0], buff, BUFF_SIZE)) > 0)
 	{
 		if (n < 0) throw (string("could not read from socket"));
-		write(1, buff, BUFF_SIZE);
+		if (i++ == 300)
+			write(1, buff, BUFF_SIZE);
+		bzero(buff, BUFF_SIZE);
 	}
 }
 
