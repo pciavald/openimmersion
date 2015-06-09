@@ -19,10 +19,10 @@ void	start_capture(void)
 	fprintf(stderr, "starting video\n");
 	g_status = mmal_port_parameter_set_boolean(video, MMAL_PARAMETER_CAPTURE, 1);
 	check(g_status, __func__, __LINE__, "starting capture");
-	fprintf(stderr, "waiting for stable fps... ");
-	while (g_data.fps != FPS)
-		;
-	fprintf(stderr, "done : %i fps.\n", FPS);
+	//fprintf(stderr, "waiting for stable fps... ");
+	//while (g_data.fps != FPS)
+	//	;
+	//fprintf(stderr, "done : %i fps.\n", FPS);
 }
 
 void	stop_capture(void)
