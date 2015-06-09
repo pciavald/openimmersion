@@ -7,7 +7,7 @@
 #include <strings.h>
 
 #define PORT		42000
-#define BUFF_SIZE	640*480 * 3
+#define BUFF_SIZE	1024
 
 void	sig_handler(int val)
 {
