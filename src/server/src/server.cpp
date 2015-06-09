@@ -4,8 +4,10 @@
 #include <unistd.h>
 
 #include "Socket.hpp"
+#include <strings.h>
 
-#define PORT	42000
+#define PORT		42000
+#define BUFF_SIZE	640*480 * 3
 
 void	sig_handler(int val)
 {
@@ -18,8 +20,6 @@ void	sig_handler(int val)
 			fprintf(stderr, "interrupt\n");
 			break ;
 	}
-	//close(newsockfd);
-	//close(sockfd);
 	exit(1);
 }
 
@@ -29,16 +29,13 @@ void	init(void)
 	signal(SIGINT, sig_handler);
 }
 
-#define BUFF_SIZE	640*480 * 3
-#include <strings.h>
-
 void	dump(Socket & s, int c)
 {
 	int		n;
 	char	buff[BUFF_SIZE];
 
 	bzero(buff, BUFF_SIZE);
-	while ((n = read(s.getClient(c), buffer, BUFF_SIZE)) > 0)
+	while ((n = read(s.getClients()[0], buff, BUFF_SIZE)) > 0)
 	{
 		if (n < 0) throw (string("could not read from socket"));
 		write(1, buff, BUFF_SIZE);

@@ -1,7 +1,8 @@
 #include "Socket.hpp"
 #include <sys/socket.h>
+#include <unistd.h>
 
-int		Socket::getClient(int client) {return (_fd[client];)}
+int *	Socket::getClients(void) {return (_fds);}
 
 static void		open_socket(int & fd)
 {
@@ -46,23 +47,25 @@ static void		wait_for_peers(int fd, int * fds, t_sockaddr_in * addrs)
 	}
 }
 
-static void		set_clients(int * fds, t_sockaddr_in * addrs)
-{
-}
-
 Socket::Socket(void)
 {
-	int				fds		[MAX_PEERS];
-	t_sockaddr_in	addrs	[MAX_PEERS];
-
-	open_socket(_fd);
-	set_address(_addr);
-	bind_port(_fd, &_addr, sizeof (_addr));
-	listen(_fd, MAX_PEERS);
-	wait_for_peers(_fd, fds, addrs);
-	set_clients(fds, addrs);
+	try
+	{
+		open_socket(_fd);
+		set_address(_addr);
+		bind_port(_fd, &_addr, sizeof (_addr));
+		listen(_fd, MAX_PEERS);
+		wait_for_peers(_fd, _fds, _addrs);
+	}
+	catch (string & s) {
+		cerr << s << endl;
+	}
 }
 
 Socket::~Socket(void)
 {
+	cerr << "closing connections" << endl;
+	for (int i = 0; i < MAX_PEERS; i++)
+		close(_fds[i]);
+	close(_fd);
 }
