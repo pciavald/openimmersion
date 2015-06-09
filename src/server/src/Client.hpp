@@ -8,6 +8,8 @@ class Client
 		~Client(void);
 
 	private:
+		int		_fd;
+
 		Client &	operator=(const Client &);
 		Client(const Client &);
 };

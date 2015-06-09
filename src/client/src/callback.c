@@ -9,11 +9,11 @@ static void		send_buffer(void * data, size_t length)
 
 static void		use_buffer(uint8_t * buffer, uint32_t buffer_length, int frame)
 {
-	size_t		data_length = 64 * 48;
+	size_t		data_length = 1024;
 	char		data[data_length];
 
 	// dump a YUV frame
-	if (frame == 300)
+	if (frame == -1)
 		dump(buffer, buffer_length);
 
 	memset(data, data_length, '\0');
@@ -26,9 +26,9 @@ static void		use_buffer(uint8_t * buffer, uint32_t buffer_length, int frame)
 	// test
 	size_t i;
 	for (i = 0; i < data_length; i++)
-		data[i] = (i % 26) + 'a';
+		data[i] = i % 256;
 
-	//send_buffer(data, data_length);
+	send_buffer(data, data_length);
 }
 
 static void		send_new_buffer_to_port(MMAL_POOL_T * pool, MMAL_PORT_T * port)

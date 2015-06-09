@@ -19,9 +19,15 @@ class Socket
 		Socket(void);
 		~Socket(void);
 
+		int *	getClients(void);
+
 	private:
 		int				_fd;
 		t_sockaddr_in	_addr;
+
+		int				_fds	[MAX_PEERS];
+		t_sockaddr_in	_addrs	[MAX_PEERS];
+
 		Client			_left;
 		Client			_right;
 
