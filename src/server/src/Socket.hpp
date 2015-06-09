@@ -19,6 +19,8 @@ class Socket
 		Socket(void);
 		~Socket(void);
 
+		int		getClient(int client);
+
 	private:
 		int				_fd;
 		t_sockaddr_in	_addr;

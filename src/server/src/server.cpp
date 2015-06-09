@@ -29,9 +29,26 @@ void	init(void)
 	signal(SIGINT, sig_handler);
 }
 
+#define BUFF_SIZE	640*480 * 3
+#include <strings.h>
+
+void	dump(Socket & s, int c)
+{
+	int		n;
+	char	buff[BUFF_SIZE];
+
+	bzero(buff, BUFF_SIZE);
+	while ((n = read(s.getClient(c), buffer, BUFF_SIZE)) > 0)
+	{
+		if (n < 0) throw (string("could not read from socket"));
+		write(1, buff, BUFF_SIZE);
+	}
+}
+
 int		main(void)
 {
 	Socket		s;
 	init();
+	dump(s, 1);
 	return (0);
 }

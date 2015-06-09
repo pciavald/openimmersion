@@ -1,6 +1,8 @@
 #include "Socket.hpp"
 #include <sys/socket.h>
 
+int		Socket::getClient(int client) {return (_fd[client];)}
+
 static void		open_socket(int & fd)
 {
 	fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -30,7 +32,7 @@ static void		wait_for_peers(int fd, int * fds, t_sockaddr_in * addrs)
 	t_sockaddr *	addr;
 	socklen_t		addr_len;
 	
-	cout << "waiting for peers to connect..." << endl;
+	cerr << "waiting for peers to connect..." << endl;
 	while (client < MAX_PEERS)
 	{
 		addr = reinterpret_cast<t_sockaddr *>(&addrs[client]);
@@ -39,8 +41,8 @@ static void		wait_for_peers(int fd, int * fds, t_sockaddr_in * addrs)
 		if (fds[client] < 2)
 			throw (string("error connecting with client #%i", client));
 		client++;
-		cout << "received a connection, remaining ";
-		cout << MAX_PEERS - client << endl;
+		cerr << "received a connection, remaining ";
+		cerr << MAX_PEERS - client << endl;
 	}
 }
 
