@@ -8,7 +8,6 @@
 #include <vector>
 
 #define PORT		42000
-#define MAX_PEERS	1
 
 typedef struct sockaddr_in		t_sockaddr_in;
 typedef struct sockaddr			t_sockaddr;

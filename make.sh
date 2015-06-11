@@ -1,2 +1,2 @@
 #!/bin/sh
-catkin_make
+catkin_make -DCMAKE_BUILD_TYPE=Debug
