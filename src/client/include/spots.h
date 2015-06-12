@@ -9,6 +9,7 @@
 
 #define SIZETOTAL		WIDTH * HEIGHT
 #define THRESHOLD		350
+#define MAX_SPOTS		256
 
 typedef struct	s_pixel {
 	uint8_t		b;
@@ -18,9 +19,21 @@ typedef struct	s_pixel {
 
 typedef struct 	s_pos {
 	t_pixel		color;
-	int			x;
-	int			y;
+	uint32_t	x;
+	uint32_t	y;
 }				t_pos;
+
+typedef struct	s_hdr
+{
+	uint16_t	elems;
+	uint16_t	size;
+}				t_hdr;
+
+typedef struct	s_packet
+{
+	t_hdr		header;
+	t_pos		data[MAX_SPOTS];
+}				t_packet;
 
 typedef struct	s_int_color {
 	int			b;
@@ -34,12 +47,6 @@ typedef struct	s_count_helper {
 	int			y;
 	int			size;
 }				t_count_helper;
-
-typedef struct	s_packet
-{
-	size_t		size;
-	t_pos		data[256];
-}				t_packet;
 
 bool		g_pixel_buffer[SIZETOTAL];
 
