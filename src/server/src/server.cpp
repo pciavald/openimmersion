@@ -64,6 +64,7 @@ int		main(int argc, char ** argv)
 			get((char *)buff, &s);
 			compute(&pose, (char *)buff);
 			ros.send(pose);
+			cerr << "lol" << endl;
 		}
 	}
 	catch (string & s) {

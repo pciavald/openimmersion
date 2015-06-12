@@ -22,7 +22,6 @@ add_executable(			server
 	src/server.cpp
 	src/Socket.cpp
 	src/Socket.constructor.cpp
-	src/Client.cpp
 	src/Ros.cpp
 	)
 target_link_libraries(	server
