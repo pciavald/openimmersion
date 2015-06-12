@@ -2,22 +2,25 @@
 #include "spots.h"
 #include <sys/socket.h>
 
-static void		send_buffer(void * data, size_t length)
+static void		send_buffer(t_packet * packet)
 {
-	g_status = send(g_data.server, data, length, 0);
+	g_status = send(g_data.server, &(packet->header), sizeof(t_hdr), 0);
+	check(g_status < 0 ? -1 : 0, __func__, __LINE__, "sending header");
+	g_status = send(g_data.server, packet, packet->header.size, 0);
 	check(g_status < 0 ? -1 : 0, __func__, __LINE__, "sending data");
 }
 
 static size_t	weight(t_packet * packet)
 {
-	return (sizeof (size_t) + packet->size * sizeof (t_pos));
+	return (sizeof(t_hdr) + packet->header.elems * sizeof(t_pos));
 }
 
 static size_t	test(void * data, void * buffer)
 {
 	size_t		spots		= 0;
-	t_pos *		position	= (t_pos *)buffer;
+	t_pos *		position	= (t_pos *)data;
 
+	(void)data;
 	spots = 4;
 	position[0].color.b = 42;
 	position[0].color.g = 42;
@@ -53,9 +56,10 @@ static void		use_buffer(uint8_t * buffer, uint32_t buffer_length, int frame)
 
 	bzero(&pack, sizeof (pack));
 	//pack.size = detect_spots(pack.data, buffer);
-	pack.size = test(pack.data, buffer);
+	pack.header.elems = test(pack.data, buffer);
+	pack.header.size = weight(&pack);
 
-	send_buffer(&pack, weight(&pack));
+	send_buffer(&pack);
 }
 
 static void		send_new_buffer_to_port(MMAL_POOL_T * pool, MMAL_PORT_T * port)
