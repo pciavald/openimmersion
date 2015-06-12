@@ -27,6 +27,7 @@ link_directories(
 add_executable(			client
 	src/commit_ports.c
 	src/debug.c
+	src/spot.c
 	src/callback.c
 	src/setup.c
 	src/init.c
