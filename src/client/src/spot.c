@@ -7,7 +7,7 @@ static bool		pixel_is_over_threshold(t_pixel pixel, int threshold) {
 }
 
 static t_count_helper	recursive_count_island(int index, t_pixel *image) {
-	int	target;
+	int				target;
 	t_count_helper	result;
 	t_count_helper	recurs;
 
@@ -15,9 +15,9 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 
 	result.x = index % WIDTH;
 	result.y = index / WIDTH;
-	result.g = image[index].g;
-	result.r = image[index].r;
-	result.b = image[index].b;
+	result.color.b = image[index].b;
+	result.color.g = image[index].g;
+	result.color.r = image[index].r;
 
 	//up
 	if (index > WIDTH) {
@@ -26,8 +26,8 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 			recurs = recursive_count_island(target, image);
 			result.x += recurs.x;
 			result.y += recurs.y;
-			result.color.g += recurs.color.g;
 			result.color.b += recurs.color.b;
+			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
 		}
 	}
@@ -38,8 +38,8 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 			recurs = recursive_count_island(target, image);
 			result.x += recurs.x;
 			result.y += recurs.y;
-			result.color.g += recurs.color.g;
 			result.color.b += recurs.color.b;
+			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
 		}
 	}
@@ -50,8 +50,8 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 			recurs = recursive_count_island(target, image);
 			result.x += recurs.x;
 			result.y += recurs.y;
-			result.color.g += recurs.color.g;
 			result.color.b += recurs.color.b;
+			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
 		}
 	}
@@ -62,8 +62,8 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 			recurs = recursive_count_island(target, image);
 			result.x += recurs.x;
 			result.y += recurs.y;
-			result.color.g += recurs.color.g;
 			result.color.b += recurs.color.b;
+			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
 		}
 	}
@@ -74,11 +74,16 @@ t_pos		count_island(int index, t_pixel *image) {
 	t_count_helper	result = recursive_count_island(index, image);
 	t_pos			ret;
 
-	ret.x = result.x / result.size;
-	ret.y = result.y / result.size;
-	ret.color.g = result.g / result.size;
-	ret.color.b = result.b / result.size;
-	ret.color.r = result.r / result.size;
+	if (result.size != 0)
+	{
+		ret.x = result.x / result.size;
+		ret.y = result.y / result.size;
+		ret.color.b = result.color.b / result.size;
+		ret.color.g = result.color.g / result.size;
+		ret.color.r = result.color.r / result.size;
+	}
+	else
+		check(-1, __func__, __LINE__, "division by 0");
 	return (ret);
 }
 
@@ -86,12 +91,14 @@ size_t		detect_spots(void *data, void *buffer) {
 	size_t	return_spot_array_size = 0;
 	t_pos	*spot_array = (t_pos *)data;
 	t_pixel	*image = (t_pixel *)buffer;
+	int		i;
 
 	//memset(&g_pixel_buffer, 0, (SIZETOTAL * sizeof(bool)));
-	for (int i = 0; i < SIZETOTAL; i++) {
-		g_pixel_buffer[i] = pixel_is_over_threshold(image[i], threshold));
-	for (int i = 0; i < SIZETOTAL; i++) {
-		if g_pixel_buffer[i]
+	for (i = 0; i < SIZETOTAL; i++) {
+		g_pixel_buffer[i] = pixel_is_over_threshold(image[i], THRESHOLD);
+	}
+	for (i = 0; i < SIZETOTAL; i++) {
+		if (g_pixel_buffer[i])
 			spot_array[return_spot_array_size++] = count_island(i, image);
 	}
 	return (return_spot_array_size);

@@ -1,4 +1,5 @@
 #include "openimmersion.h"
+#include "spots.h"
 #include <sys/socket.h>
 
 static void		send_buffer(void * data, size_t length)
@@ -7,28 +8,23 @@ static void		send_buffer(void * data, size_t length)
 	check(g_status < 0 ? -1 : 0, __func__, __LINE__, "sending data");
 }
 
+static size_t	weight(t_packet * packet)
+{
+	return (sizeof (size_t) + packet->size * sizeof (t_pos));
+}
+
 static void		use_buffer(uint8_t * buffer, uint32_t buffer_length, int frame)
 {
-	size_t		data_length = 1024;
-	char		data[data_length];
+	t_packet	pack;
 
-	// dump a YUV frame
+	// dump a BGR888 frame
 	if (frame == -1)
 		dump(buffer, buffer_length);
 
-	memset(data, data_length, '\0');
-	/*
-	 * process buffer here
-	 * output data in &data
-	 * set length of data_length
-	 */
+	bzero(&pack, sizeof (pack));
+	pack.size = detect_spots(pack.data, buffer);
 
-	// test
-	size_t i;
-	for (i = 0; i < data_length; i++)
-		data[i] = i % 256;
-
-	send_buffer(data, data_length);
+	send_buffer(&pack, weight(&pack));
 }
 
 static void		send_new_buffer_to_port(MMAL_POOL_T * pool, MMAL_PORT_T * port)

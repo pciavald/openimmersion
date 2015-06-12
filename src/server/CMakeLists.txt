@@ -18,6 +18,7 @@ include_directories(
 )
 
 add_executable(			server
+	src/init.cpp
 	src/server.cpp
 	src/Socket.cpp
 	src/Client.cpp

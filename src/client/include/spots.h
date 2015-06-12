@@ -8,6 +8,7 @@
 #define false			0
 
 #define SIZETOTAL		WIDTH * HEIGHT
+#define THRESHOLD		350
 
 typedef struct	s_pixel {
 	uint8_t		b;
@@ -28,13 +29,17 @@ typedef struct	s_int_color {
 }				t_int_color;
 
 typedef struct	s_count_helper {
-	int			b;
-	int			g;
-	int			r;
+	t_int_color	color;
 	int			x;
 	int			y;
 	int			size;
 }				t_count_helper;
+
+typedef struct	s_packet
+{
+	size_t		size;
+	t_pos		data[256];
+}				t_packet;
 
 bool		g_pixel_buffer[SIZETOTAL];
 
