@@ -1,33 +1,4 @@
-#define SIZETOTAL		307200
-
-typedef struct 	s_pos {
-	t_pixel		color;
-	int			x;
-	int			y;
-}				t_pos;
-
-typedef struct	s_pixel {
-	uint8_t		g;
-	uint8_t		b;
-	uint8_t		r;
-}				t_pixel;
-
-typedef struct	s_int_color {
-	int			g;
-	int			b;
-	int			r;
-}				t_int_color;
-
-typedef struct	s_count_helper {
-	int	g;
-	int	r;
-	int	b;
-	int	x;
-	int	y;
-	int	size;
-}				t_count_helper;
-
-bool		g_pixel_buffer[SIZETOTAL];
+#include "spots.h"
 
 static bool		pixel_is_over_threshold(t_pixel pixel, int threshold) {
 	if ((int)(pixel.g + pixel.r + pixel.b) > threshold)
@@ -73,7 +44,7 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 		}
 	}
 	//left
-	if ((index % WIDTH) {
+	if (index % WIDTH) {
 		target = index - 1;
 		if (g_pixel_buffer[target]) {
 			recurs = recursive_count_island(target, image);
