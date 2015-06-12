@@ -2,10 +2,11 @@
 # define SOCKET_HPP
 
 #include "server.hpp"
-#include "Client.hpp"
+//#include "Client.hpp"
 #include <netinet/in.h>
 #include <iostream>
 #include <vector>
+#include <unistd.h>
 
 #define PORT		42000
 
@@ -22,13 +23,15 @@ class Socket
 
 	private:
 		int				_fd;
-		t_sockaddr_in	_addr;
+		int				_clients[MAX_PEERS];
+		//t_sockaddr_in	_addr;
+		//int				_nbClients;
+		//vector<Client>	_clients;
 
-		int				_fds	[MAX_PEERS];
-		t_sockaddr_in	_addrs	[MAX_PEERS];
+		//void			_addClient(int & fd, t_sockaddr_in & addr);
 
-		Client			_left;
-		Client			_right;
+		//int				_fds	[MAX_PEERS];
+		//t_sockaddr_in	_addrs	[MAX_PEERS];
 
 		Socket &	operator=(const Socket &);
 		Socket(const Socket &);

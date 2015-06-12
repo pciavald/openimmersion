@@ -21,6 +21,7 @@ add_executable(			server
 	src/init.cpp
 	src/server.cpp
 	src/Socket.cpp
+	src/Socket.constructor.cpp
 	src/Client.cpp
 	src/Ros.cpp
 	)
