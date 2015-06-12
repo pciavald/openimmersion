@@ -8,10 +8,12 @@ static void		send_buffer(void * data, size_t length)
 	check(g_status < 0 ? -1 : 0, __func__, __LINE__, "sending data");
 }
 
+/*
 static size_t	weight(t_packet * packet)
 {
 	return (sizeof (size_t) + packet->size * sizeof (t_pos));
 }
+*/
 
 static size_t	test(void * data, void * buffer)
 {
@@ -55,7 +57,7 @@ static void		use_buffer(uint8_t * buffer, uint32_t buffer_length, int frame)
 	//pack.size = detect_spots(pack.data, buffer);
 	pack.size = test(pack.data, buffer);
 
-	send_buffer(&pack, weight(&pack));
+	send_buffer(&pack, sizeof (t_packet));
 }
 
 static void		send_new_buffer_to_port(MMAL_POOL_T * pool, MMAL_PORT_T * port)
