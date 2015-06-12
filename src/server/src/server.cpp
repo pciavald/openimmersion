@@ -6,41 +6,13 @@
 #include "Socket.hpp"
 #include "Ros.hpp"
 
-static void		get(t_packet * p, int * clients)
-{
-	int			i;
-	int			n;
-	int			acc = 0;
-	char *		begin;
-	char *		buff = NULL;
-
-	while (i < MAX_PEERS)
-	{
-		buff = reinterpret_cast<char *>(&p[i]);
-		n = read(clients[i], buff + acc, sizeof(t_packet));
-		cerr << "recv " << n << endl;
-		if (n < 0)
-			throw (string("could not read from socket"));
-		if (n == 0)
-			throw (string("broken pipe"));
-		if (n + acc < sizeof(t_packet))
-		{
-			acc += n;
-			i++;
-			continue ;
-		}
-		if (n + acc > sizeof(t_packet))
-			throw (string("buffer overflow"));
-		acc = 0;
-	}
-}
-
 static void		dump(t_packet * packet)
 {
 	t_pos *		pos;
 
-	cerr << "-- packet has " << packet->size << " entries" << endl;
-	for (int i = 0; i < packet->size; i++)
+	cerr << "-- packet has " << packet->header.elems << " entries and weights ";
+	cerr << packet->header.size << endl;
+	for (int i = 0; i < packet->header.elems; i++)
 	{
 		pos = &packet->data[i];
 		cerr << "x " << pos->x << " y " << pos->y << endl;
@@ -48,6 +20,35 @@ static void		dump(t_packet * packet)
 		cerr << pos->color.r;
 		cerr << pos->color.g;
 		cerr << pos->color.b << endl;
+	}
+}
+
+static void		get(t_packet * packets, int * clients)
+{
+	int			n;
+	int			acc;
+	int			i = 0;
+	t_hdr		header;
+	char *		buff = NULL;
+
+	while (i < MAX_PEERS)
+	{
+		bzero(&header, sizeof(t_hdr));
+		n = read(clients[i], &header, sizeof(t_hdr));
+		if (n < 1)
+			throw (string("could not read size from socket"));
+		buff = reinterpret_cast<char *>(&(packets[i]));
+		acc = n = 0;
+		while (acc + n < header.size)
+		{
+			n = read(clients[i], buff + acc, header.size);
+			if (n < 1)
+				throw (string("could not read data from socket"));
+			acc += n;
+			n = 0;
+		}
+		acc = 0;
+		i++;
 	}
 }
 
@@ -59,13 +60,7 @@ static void		compute(geometry_msgs::Point * pose, t_packet * packets)
 	 * cf server.hpp or spots.h
 	 */
 
-	cerr << sizeof(size_t) + 4 * sizeof(t_pos) << endl;
 	// test
-	for (int i = 0; i < MAX_PEERS; i++)
-	{
-		//cerr << endl << "peer " << i << endl;
-		//dump(&packets[i]);
-	}
 	pose->x = 1;
 	pose->y = 2;
 	pose->z = 3;
