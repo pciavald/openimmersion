@@ -54,7 +54,7 @@ Socket::Socket(void)
 		open_socket(_fd);
 		set_address(_addr);
 		bind_port(_fd, &_addr, sizeof (_addr));
-		listen(_fd, MAX_PEERS);
+		listen(_fd, 5);
 		wait_for_peers(_fd, _fds, _addrs);
 	}
 	catch (string & s) {
