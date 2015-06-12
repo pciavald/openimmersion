@@ -31,6 +31,7 @@ static void		lookup_host(t_sockaddr_in * addr, char * name, int port)
 	hints.ai_flags		|= AI_CANONNAME;
 
 	g_status = getaddrinfo(name, NULL, &hints, &res);
+	if (g_status) fprintf(stderr, "%s\n", gai_strerror(g_status));
 	check(g_status, __func__, __LINE__, "resolving host");
 
 	inet_ntop(res->ai_family, res->ai_addr->sa_data, addrstr, 100);

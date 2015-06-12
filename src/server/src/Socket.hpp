@@ -2,13 +2,10 @@
 # define SOCKET_HPP
 
 #include "server.hpp"
-#include "Client.hpp"
 #include <netinet/in.h>
+#include <sys/socket.h>
+#include <unistd.h>
 #include <iostream>
-#include <vector>
-
-#define PORT		42000
-#define MAX_PEERS	2
 
 typedef struct sockaddr_in		t_sockaddr_in;
 typedef struct sockaddr			t_sockaddr;
@@ -19,11 +16,11 @@ class Socket
 		Socket(void);
 		~Socket(void);
 
+		int *	getClients(void);
+
 	private:
 		int				_fd;
-		t_sockaddr_in	_addr;
-		Client			_left;
-		Client			_right;
+		int				_clients[MAX_PEERS];
 
 		Socket &	operator=(const Socket &);
 		Socket(const Socket &);

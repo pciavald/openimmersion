@@ -1,4 +1,5 @@
 #include "openimmersion.h"
+#include "spots.h"
 #include <sys/socket.h>
 
 static void		send_buffer(void * data, size_t length)
@@ -7,28 +8,54 @@ static void		send_buffer(void * data, size_t length)
 	check(g_status < 0 ? -1 : 0, __func__, __LINE__, "sending data");
 }
 
+static size_t	weight(t_packet * packet)
+{
+	return (sizeof (size_t) + packet->size * sizeof (t_pos));
+}
+
+static size_t	test(void * data, void * buffer)
+{
+	size_t		spots		= 0;
+	t_pos *		position	= (t_pos *)buffer;
+
+	spots = 4;
+	position[0].color.b = 42;
+	position[0].color.g = 42;
+	position[0].color.r = 42;
+	position[0].x = 42;
+	position[0].y = 42;
+	position[1].color.b = 42;
+	position[1].color.g = 42;
+	position[1].color.r = 42;
+	position[1].x = 42;
+	position[1].y = 42;
+	position[2].color.b = 42;
+	position[2].color.g = 42;
+	position[2].color.r = 42;
+	position[2].x = 42;
+	position[2].y = 42;
+	position[3].color.b = 42;
+	position[3].color.g = 42;
+	position[3].color.r = 42;
+	position[3].x = 42;
+	position[3].y = 42;
+
+	return (spots);
+}
+
 static void		use_buffer(uint8_t * buffer, uint32_t buffer_length, int frame)
 {
-	size_t		data_length = 64 * 48;
-	char		data[data_length];
+	t_packet	pack;
 
-	// dump a YUV frame
-	if (frame == 300)
+	// dump a BGR888 frame
+	if (frame == -1)
 		dump(buffer, buffer_length);
 
-	memset(data, data_length, '\0');
-	/*
-	 * process buffer here
-	 * output data in &data
-	 * set length of data_length
-	 */
+	bzero(&pack, sizeof (pack));
+	//pack.size = detect_spots(pack.data, buffer);
+	pack.size = test(pack.data, buffer);
 
-	// test
-	size_t i;
-	for (i = 0; i < data_length; i++)
-		data[i] = (i % 26) + 'a';
-
-	//send_buffer(data, data_length);
+	send_buffer(&pack, weight(&pack));
 }
 
 static void		send_new_buffer_to_port(MMAL_POOL_T * pool, MMAL_PORT_T * port)

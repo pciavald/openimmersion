@@ -18,9 +18,11 @@ include_directories(
 )
 
 add_executable(			server
+	src/init.cpp
 	src/server.cpp
 	src/Socket.cpp
-	src/Client.cpp
+	src/Socket.constructor.cpp
+	src/Ros.cpp
 	)
 target_link_libraries(	server
 	${catkin_LIBRARIES}
