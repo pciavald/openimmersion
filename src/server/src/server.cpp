@@ -1,4 +1,3 @@
-#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -6,43 +5,6 @@
 #include "Socket.hpp"
 #include "Ros.hpp"
 #include <strings.h>
-
-void	sig_handler(int val)
-{
-	switch (val)
-	{
-		case SIGPIPE:
-			fprintf(stderr, "broken pipe\n");
-			break ;
-		case SIGINT:
-			fprintf(stderr, "interrupt\n");
-			break ;
-	}
-	exit(1);
-}
-
-void	init(int argc, char ** argv)
-{
-	signal(SIGPIPE, sig_handler);
-	signal(SIGINT, sig_handler);
-	ros::init(argc, argv, "server");
-}
-
-void	dump(Socket * s, int c)
-{
-	int		i = 0;
-	int		n;
-	char	buff[BUFF_SIZE];
-
-	bzero(buff, BUFF_SIZE);
-	while ((n = read(s->getClients()[0], buff, BUFF_SIZE)) > 0)
-	{
-		if (n < 0) throw (string("could not read from socket"));
-		if (i++ == 300)
-			write(1, buff, BUFF_SIZE);
-		bzero(buff, BUFF_SIZE);
-	}
-}
 
 static void		get(char * buff, Socket * sock)
 {
@@ -102,7 +64,6 @@ int		main(int argc, char ** argv)
 			get((char *)buff, &s);
 			compute(&pose, (char *)buff);
 			ros.send(pose);
-			cerr << "lol" << endl;
 		}
 	}
 	catch (string & s) {
