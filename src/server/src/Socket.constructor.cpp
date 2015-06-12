@@ -25,7 +25,7 @@ static void		bind_port(int & fd, t_sockaddr_in * addr, size_t size)
 
 static void		wait_for_peers(int & sock, int * clients)
 {
-	int				client;
+	int				client = 0;
 	int				fd;
 	t_sockaddr *	addr;
 	t_sockaddr_in	addr_in;
@@ -36,8 +36,9 @@ static void		wait_for_peers(int & sock, int * clients)
 	addr_len = sizeof (addr_in);
 	while (client < MAX_PEERS)
 	{
-		//fd = accept(sock, addr, &addr_len);
-		fd = accept(sock, NULL, NULL);
+		fd = accept(sock, addr, &addr_len);
+		//fd = accept(sock, NULL, NULL);
+		cerr << "lol" << endl;
 		if (fd < 2)
 			throw (string("error connecting with client #%i", client));
 		clients[client++] = fd;
