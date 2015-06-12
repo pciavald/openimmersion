@@ -18,6 +18,7 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 	result.color.b = image[index].b;
 	result.color.g = image[index].g;
 	result.color.r = image[index].r;
+	result.size = 1;
 
 	//up
 	if (index > WIDTH) {
@@ -30,6 +31,7 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
 		}
+		result.size += recurs.size;
 	}
 	//right
 	if ((index + 1) % WIDTH) {
@@ -42,6 +44,7 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
 		}
+		result.size += recurs.size;
 	}
 	//left
 	if (index % WIDTH) {
@@ -54,6 +57,7 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
 		}
+		result.size += recurs.size;
 	}
 	//bottom
 	if ((index / WIDTH) + 1 < HEIGHT) {
@@ -66,6 +70,7 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
 		}
+		result.size += recurs.size;
 	}
 	return (result);
 }
