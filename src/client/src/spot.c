@@ -74,16 +74,12 @@ t_pos		count_island(int index, t_pixel *image) {
 	t_count_helper	result = recursive_count_island(index, image);
 	t_pos			ret;
 
-	if (result.size != 0)
-	{
-		ret.x = result.x / result.size;
-		ret.y = result.y / result.size;
-		ret.color.b = result.color.b / result.size;
-		ret.color.g = result.color.g / result.size;
-		ret.color.r = result.color.r / result.size;
-	}
-	else
-		check(-1, __func__, __LINE__, "division by 0");
+	check((result.size == 0), __func__, __LINE__, "division by 0");
+	ret.x = result.x / result.size;
+	ret.y = result.y / result.size;
+	ret.color.b = result.color.b / result.size;
+	ret.color.g = result.color.g / result.size;
+	ret.color.r = result.color.r / result.size;
 	return (ret);
 }
 
