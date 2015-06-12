@@ -27,18 +27,11 @@ static void		wait_for_peers(int & sock, int * clients)
 {
 	int				client = 0;
 	int				fd;
-	t_sockaddr *	addr;
-	t_sockaddr_in	addr_in;
-	socklen_t		addr_len;
 	
 	cerr << "waiting for peers to connect..." << endl;
-	addr = reinterpret_cast<t_sockaddr *>(&addr_in);
-	addr_len = sizeof (addr_in);
 	while (client < MAX_PEERS)
 	{
-		fd = accept(sock, addr, &addr_len);
-		//fd = accept(sock, NULL, NULL);
-		cerr << "lol" << endl;
+		fd = accept(sock, NULL, NULL);
 		if (fd < 2)
 			throw (string("error connecting with client #%i", client));
 		clients[client++] = fd;
