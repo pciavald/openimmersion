@@ -1,5 +1,4 @@
 #include "Socket.hpp"
-#include <sys/socket.h>
 
 static void		open_socket(int & fd)
 {
