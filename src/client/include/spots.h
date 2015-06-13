@@ -3,10 +3,6 @@
 
 #include "openimmersion.h"
 
-#define bool			char
-#define true			1
-#define false			0
-
 #define SIZETOTAL		WIDTH * HEIGHT
 #define THRESHOLD		750
 #define MAX_SPOTS		256

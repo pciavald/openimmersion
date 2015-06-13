@@ -26,6 +26,10 @@ typedef struct sockaddr			t_sockaddr;
 typedef struct addrinfo			t_addrinfo;
 typedef struct in_addr			t_in_addr;
 
+#define bool			char
+#define true			1
+#define false			0
+
 #define WIDTH			640
 #define HEIGHT			480
 #define FPS				90
@@ -53,6 +57,7 @@ typedef struct				s_data
 	int						server;
 	int						fps;
 	int						start;
+	int						connected;
 }							t_data;
 
 t_data			g_data;

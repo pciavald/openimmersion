@@ -2,17 +2,14 @@
 
 int		main(void)
 {
-	int		i = 1;
-
 	init();
-	init_client(SERVER_NAME, SERVER_PORT);
 	g_data.start = 1;
 	while (42)
 	{
-		if (i)
+		if (g_data.connected == false)
 		{
+			init_client(SERVER_NAME, SERVER_PORT);
 			wait_for_server(g_data.server, (t_sockaddr *)&g_data.internet_socket);
-			i = 0;
 		}
 		if (g_data.start)
 		{

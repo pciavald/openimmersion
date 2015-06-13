@@ -6,8 +6,12 @@ void		wait_for_server(int fd, t_sockaddr * s_addr)
 
 	fprintf(stderr, "waiting for server... ");
 	while (ret != 0)
+	{
 		ret = connect(fd, s_addr, sizeof (t_sockaddr_in));
+		strerror(errno);
+	}
 	fprintf(stderr, "connected.\n");
+	g_data.connected = true;
 }
 
 static void		lookup_host(t_sockaddr_in * addr, char * name, int port)

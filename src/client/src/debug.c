@@ -10,7 +10,9 @@ void	sig_handler(int sig)
 			break ;
 		case SIGPIPE:
 			fprintf(stderr, "broken pipe\n");
-			break ;
+			g_data.connected = false;
+			close(g_data.server);
+			return ;
 	}
 	if (g_data.server > 2)
 		close(g_data.server);
