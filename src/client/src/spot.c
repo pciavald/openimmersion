@@ -11,7 +11,6 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 	t_count_helper	result;
 	t_count_helper	recurs;
 
-	fprintf(stderr, "%i\n", index);
 	g_pixel_buffer[index] = false;
 
 	result.x = index % WIDTH;
@@ -25,57 +24,53 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 	if (index > WIDTH) {
 		target = index - WIDTH;
 		if (g_pixel_buffer[target]) {
-			fprintf(stderr, "up\n");
 			recurs = recursive_count_island(target, image);
 			result.x += recurs.x;
 			result.y += recurs.y;
 			result.color.b += recurs.color.b;
 			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
+			result.size += recurs.size;
 		}
-		result.size += recurs.size;
 	}
 	//right
 	if ((index + 1) % WIDTH) {
 		target = index + 1;
 		if (g_pixel_buffer[target]) {
-			fprintf(stderr, "right\n");
 			recurs = recursive_count_island(target, image);
 			result.x += recurs.x;
 			result.y += recurs.y;
 			result.color.b += recurs.color.b;
 			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
+			result.size += recurs.size;
 		}
-		result.size += recurs.size;
 	}
 	//left
 	if (index % WIDTH) {
 		target = index - 1;
 		if (g_pixel_buffer[target]) {
-			fprintf(stderr, "left\n");
 			recurs = recursive_count_island(target, image);
 			result.x += recurs.x;
 			result.y += recurs.y;
 			result.color.b += recurs.color.b;
 			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
+			result.size += recurs.size;
 		}
-		result.size += recurs.size;
 	}
 	//bottom
 	if ((index / WIDTH) + 1 < HEIGHT) {
 		target = index + WIDTH;
 		if (g_pixel_buffer[target]) {
-			fprintf(stderr, "bot\n");
 			recurs = recursive_count_island(target, image);
 			result.x += recurs.x;
 			result.y += recurs.y;
 			result.color.b += recurs.color.b;
 			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
+			result.size += recurs.size;
 		}
-		result.size += recurs.size;
 	}
 	return (result);
 }
@@ -99,16 +94,13 @@ size_t		detect_spots(void *data, void *buffer) {
 	t_pixel	*image = (t_pixel *)buffer;
 	int		i;
 
-	//memset(&g_pixel_buffer, 0, (SIZETOTAL * sizeof(bool)));
+	memset(&g_pixel_buffer, 0, (SIZETOTAL * sizeof(bool)));
 	for (i = 0; i < SIZETOTAL; i++) {
 		g_pixel_buffer[i] = pixel_is_over_threshold(image[i], THRESHOLD);
 	}
 	for (i = 0; i < SIZETOTAL; i++) {
 		if (g_pixel_buffer[i])
-		{
-			fprintf(stderr, "reccall\n");
 			spot_array[return_spot_array_size++] = count_island(i, image);
-		}
 	}
 	return (return_spot_array_size);
 }
