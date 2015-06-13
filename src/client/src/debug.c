@@ -12,8 +12,8 @@ void	sig_handler(int sig)
 			fprintf(stderr, "broken pipe\n");
 			break ;
 	}
-	if (g_data.server > 2)
-		close(g_data.server);
+	if (g_data.send > 2)
+		close(g_data.send);
 	stop_capture();
 	fprintf(stderr, "successfully destroyed all components, leaving.\n");
 	exit(0);

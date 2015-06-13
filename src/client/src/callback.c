@@ -4,46 +4,15 @@
 
 static void		send_buffer(t_packet * packet)
 {
-	g_status = send(g_data.server, &(packet->header), sizeof(t_hdr), 0);
+	g_status = send(g_data.send, &(packet->header), sizeof(t_hdr), 0);
 	check(g_status < 0 ? -1 : 0, __func__, __LINE__, "sending header");
-	g_status = send(g_data.server, packet, packet->header.size, 0);
+	g_status = send(g_data.send, packet, packet->header.size, 0);
 	check(g_status < 0 ? -1 : 0, __func__, __LINE__, "sending data");
 }
 
 static size_t	weight(t_packet * packet)
 {
 	return (sizeof(t_hdr) + packet->header.elems * sizeof(t_pos));
-}
-
-static size_t	test(void * data, void * buffer)
-{
-	size_t		spots		= 0;
-	t_pos *		position	= (t_pos *)data;
-
-	(void)data;
-	spots = 4;
-	position[0].color.b = 42;
-	position[0].color.g = 42;
-	position[0].color.r = 42;
-	position[0].x = 42;
-	position[0].y = 42;
-	position[1].color.b = 42;
-	position[1].color.g = 42;
-	position[1].color.r = 42;
-	position[1].x = 42;
-	position[1].y = 42;
-	position[2].color.b = 42;
-	position[2].color.g = 42;
-	position[2].color.r = 42;
-	position[2].x = 42;
-	position[2].y = 42;
-	position[3].color.b = 42;
-	position[3].color.g = 42;
-	position[3].color.r = 42;
-	position[3].x = 42;
-	position[3].y = 42;
-
-	return (spots);
 }
 
 static void		use_buffer(uint8_t * buffer, uint32_t buffer_length, int frame)
@@ -55,7 +24,6 @@ static void		use_buffer(uint8_t * buffer, uint32_t buffer_length, int frame)
 		dump(buffer, buffer_length);
 
 	bzero(&pack, sizeof (pack));
-	//pack.header.elems = test(pack.data, buffer);
 	pack.header.elems = detect_spots(pack.data, buffer);
 	pack.header.size = weight(&pack);
 

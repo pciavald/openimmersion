@@ -5,6 +5,12 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+
 #include "bcm_host.h"
 #include "interface/vcos/vcos.h"
 
@@ -38,9 +44,15 @@ typedef struct				s_data
 	MMAL_PORT_T *			camera_preview_port;
 	MMAL_PORT_T *			preview_input_port;
 	MMAL_POOL_T *			preview_input_port_pool;
-	int						server;
+	int						send;
+	int						receive;
 	int						fps;
 }							t_data;
+
+typedef struct sockaddr_in		t_sockaddr_in;
+typedef struct sockaddr			t_sockaddr;
+typedef struct addrinfo			t_addrinfo;
+typedef struct in_addr			t_in_addr;
 
 t_data			g_data;
 int				g_status;
@@ -52,7 +64,8 @@ void	set_video_port(MMAL_PORT_T * camera_video_port);
 void	set_preview_input_port(void);
 
 /* client.c */
-void	init_client(char * name, int port);
+t_sockaddr_in	init_client(char * name, int port);
+void			wait_for_server(t_sockaddr * s_addr);
 
 /* mmal.c */
 void	create_component(const char * name, MMAL_COMPONENT_T ** c, char * msg);
@@ -72,7 +85,6 @@ void	fetch_ports(MMAL_COMPONENT_T * camera);
 void	flush_buffers(void);
 
 /* init.c */
-
 void	init(void);
 void	init_camera(void);
 void	init_preview(void);
