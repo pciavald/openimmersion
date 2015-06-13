@@ -1,16 +1,6 @@
 #include "openimmersion.h"
-#include <arpa/inet.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
 
-typedef struct sockaddr_in		t_sockaddr_in;
-typedef struct sockaddr			t_sockaddr;
-typedef struct addrinfo			t_addrinfo;
-typedef struct in_addr			t_in_addr;
-
-static void		wait_for_server(int fd, t_sockaddr * s_addr)
+void		wait_for_server(int fd, t_sockaddr * s_addr)
 {
 	int		ret = -1;
 
@@ -53,6 +43,6 @@ void	init_client(char * name, int port)
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(port);
 
-	wait_for_server(sock, (t_sockaddr *)&sin);
 	g_data.server = sock;
+	g_data.internet_socket = sin;
 }

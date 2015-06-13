@@ -39,4 +39,3 @@ void	init_preview(void)
 			"preview");
 	flush_buffers();
 }
-
