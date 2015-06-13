@@ -30,8 +30,8 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 			result.color.b += recurs.color.b;
 			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
+			result.size += recurs.size;
 		}
-		result.size += recurs.size;
 	}
 	//right
 	if ((index + 1) % WIDTH) {
@@ -43,8 +43,8 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 			result.color.b += recurs.color.b;
 			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
+			result.size += recurs.size;
 		}
-		result.size += recurs.size;
 	}
 	//left
 	if (index % WIDTH) {
@@ -56,8 +56,8 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 			result.color.b += recurs.color.b;
 			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
+			result.size += recurs.size;
 		}
-		result.size += recurs.size;
 	}
 	//bottom
 	if ((index / WIDTH) + 1 < HEIGHT) {
@@ -69,8 +69,8 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 			result.color.b += recurs.color.b;
 			result.color.g += recurs.color.g;
 			result.color.r += recurs.color.r;
+			result.size += recurs.size;
 		}
-		result.size += recurs.size;
 	}
 	return (result);
 }
@@ -94,7 +94,7 @@ size_t		detect_spots(void *data, void *buffer) {
 	t_pixel	*image = (t_pixel *)buffer;
 	int		i;
 
-	//memset(&g_pixel_buffer, 0, (SIZETOTAL * sizeof(bool)));
+	memset(&g_pixel_buffer, 0, (SIZETOTAL * sizeof(bool)));
 	for (i = 0; i < SIZETOTAL; i++) {
 		g_pixel_buffer[i] = pixel_is_over_threshold(image[i], THRESHOLD);
 	}

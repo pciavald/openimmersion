@@ -88,6 +88,7 @@ int		main(int argc, char ** argv)
 			clean(packets);
 			get(packets, s.getClients());
 			compute(&pose, packets);
+			dump(&packets[0]);
 			ros.send(pose);
 		}
 	}
