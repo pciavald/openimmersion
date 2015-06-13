@@ -21,4 +21,3 @@ void	init(int argc, char ** argv)
 	signal(SIGINT, sig_handler);
 	ros::init(argc, argv, "server", ros::init_options::NoSigintHandler);
 }
-

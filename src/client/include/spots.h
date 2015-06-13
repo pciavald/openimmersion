@@ -8,7 +8,7 @@
 #define false			0
 
 #define SIZETOTAL		WIDTH * HEIGHT
-#define THRESHOLD		350
+#define THRESHOLD		750
 #define MAX_SPOTS		256
 
 typedef struct	s_pixel {

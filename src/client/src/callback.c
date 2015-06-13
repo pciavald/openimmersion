@@ -55,8 +55,8 @@ static void		use_buffer(uint8_t * buffer, uint32_t buffer_length, int frame)
 		dump(buffer, buffer_length);
 
 	bzero(&pack, sizeof (pack));
-	pack.header.elems = test(pack.data, buffer);
-	//pack.header.elems = detect_spots(pack.data, buffer);
+	//pack.header.elems = test(pack.data, buffer);
+	pack.header.elems = detect_spots(pack.data, buffer);
 	pack.header.size = weight(&pack);
 
 	send_buffer(&pack);
