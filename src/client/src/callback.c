@@ -45,9 +45,9 @@ static void		send_new_buffer_to_port(MMAL_POOL_T * pool, MMAL_PORT_T * port)
 void	video_buffer_callback(MMAL_PORT_T * port, MMAL_BUFFER_HEADER_T * buffer)
 {
 	static int		frame			= 0;
-	MMAL_POOL_T *	pool			= (MMAL_POOL_T *)port->userdata;
 	MMAL_POOL_T *	preview_pool	= g_data.preview_input_port_pool;
 	MMAL_PORT_T *	preview_port	= g_data.preview_input_port;
+	MMAL_POOL_T *	pool			= (MMAL_POOL_T *)port->userdata;
 
 	if (g_stop == 0)
 	{

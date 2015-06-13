@@ -1,18 +1,24 @@
 #include "openimmersion.h"
 
+
+
+
 int		main(void)
 {
-	int				connected = 0;
 	t_sockaddr_in	sin;
+	int	i = 1;
 
 	init();
 	sin = init_client(SERVER_NAME, SERVER_PORT);
 	while (42)
 	{
-		if (connected == 0)
-		{
+		if (!COMPUTE_CONNECTED)
 			wait_for_server((t_sockaddr *)&sin);
-			connected = 1;
+		// read g_data.receive
+		if (i)
+		{
+			i = 0;
+			start_capture();
 		}
 	}
 

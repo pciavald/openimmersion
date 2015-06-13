@@ -8,6 +8,7 @@ void			wait_for_server(t_sockaddr * s_addr)
 	while (ret != 0)
 		ret = connect(g_data.send, s_addr, sizeof (t_sockaddr_in));
 	fprintf(stderr, "connected.\n");
+	errno = 0;
 }
 
 static void		lookup_host(t_sockaddr_in * addr, char * name, int port)
@@ -35,10 +36,8 @@ t_sockaddr_in	init_client(char * name, int port)
 {
 	t_sockaddr_in	sin = {0, 0, {0}, {0}};
 
-	g_data.send =		socket(AF_INET, SOCK_STREAM, 0);
+	g_data.send = socket(AF_INET, SOCK_STREAM, 0);
 	check(g_data.send < 2 ? -1 : 0, __func__, __LINE__, "opening sender");
-	g_data.receive =	socket(AF_INET, SOCK_STREAM, 0);
-	check(g_data.receive < 2 ? -1 : 0, __func__, __LINE__, "opening receiver");
 
 	lookup_host(&sin, name, port);
 	sin.sin_family = AF_INET;

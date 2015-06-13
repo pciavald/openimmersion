@@ -21,6 +21,10 @@
 #include "interface/mmal/util/mmal_util.h"
 #include "interface/mmal/util/mmal_util_params.h"
 
+#define bool			char
+#define true			1
+#define false			0
+
 #define WIDTH			640
 #define HEIGHT			480
 #define FPS				90
@@ -35,6 +39,14 @@
 #define MMAL_CAMERA_VIDEO_PORT		1
 #define MMAL_CAMERA_CAPTURE_PORT	2
 
+enum e_servers
+{
+	DISPLAY,
+	COMPUTE,
+	DEBUG
+};
+#define COMPUTE_CONNECTED	(g_data.connected & COMPUTE)
+
 typedef struct				s_data
 {
 	MMAL_COMPONENT_T *		camera;
@@ -44,9 +56,10 @@ typedef struct				s_data
 	MMAL_PORT_T *			camera_preview_port;
 	MMAL_PORT_T *			preview_input_port;
 	MMAL_POOL_T *			preview_input_port_pool;
+	int						connected;
 	int						send;
-	int						receive;
 	int						fps;
+	bool					stop_video;
 }							t_data;
 
 typedef struct sockaddr_in		t_sockaddr_in;
