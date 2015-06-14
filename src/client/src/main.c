@@ -25,6 +25,10 @@ void	non_blocking_read(int fd)
 			fprintf(stderr, "STOP\n");
 			stop_capture();
 		}
+		else if (!strcmp(buffer, "calibrate:true\n"))
+			CALIBRATE = true;
+		else if (!strcmp(buffer, "calibrate:false\n"))
+			CALIBRATE = false;
 		else if (!strncmp(buffer, SHUTTER_S, sizeof(SHUTTER_S) - 1))
 		{
 			int		speed;

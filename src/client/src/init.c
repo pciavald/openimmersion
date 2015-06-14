@@ -20,7 +20,8 @@ void	init_camera(void)
 	configure_camera(g_data.camera);
 	set_preview_port(g_data.camera_preview_port);
 	set_video_port(g_data.camera_video_port);
-	if (CALIBRATE == true) {
+	if (CALIBRATE == true)
+	{
 		create_pool_on_port(
 			&(g_data.camera_video_port_pool),
 			g_data.camera_video_port,

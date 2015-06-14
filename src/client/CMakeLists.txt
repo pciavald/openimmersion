@@ -29,6 +29,7 @@ add_executable(			client
 	src/debug.c
 	src/spot.c
 	src/callback.c
+	src/calibration.c
 	src/setup.c
 	src/init.c
 	src/mmal.c

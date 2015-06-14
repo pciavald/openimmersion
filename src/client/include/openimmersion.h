@@ -37,6 +37,7 @@ typedef struct in_addr			t_in_addr;
 
 #define MAX_DEPTH		10000
 #define DEPTH_REACH		(g_data.depth_reach)
+#define CALIBRATE		(g_data.calibrate)
 
 #define SERVER_NAME		"stealth-ubuntu"
 #define SERVER_PORT		42000
@@ -68,6 +69,7 @@ typedef struct				s_data
 	int						connected;
 	char					dump[256];
 	bool					depth_reach;
+	bool					calibrate;
 }							t_data;
 
 typedef struct				s_cam_options
@@ -117,6 +119,9 @@ void	sig_handler(int sig);
 void	check(int status, const char * func, int line, char * msg);
 void	dump(uint8_t * data, uint32_t length, char * name);
 void	update_fps(void);
+
+/* calibrate.c*/
+void	calibrate(MMAL_PORT_T * port, MMAL_BUFFER_HEADER_T * buffer);
 
 /* callback.c */
 void	video_buffer_callback(MMAL_PORT_T * port, MMAL_BUFFER_HEADER_T * buffer);
