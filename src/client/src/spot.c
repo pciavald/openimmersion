@@ -6,10 +6,11 @@ static bool		pixel_is_over_threshold(t_pixel pixel, int threshold) {
 	return (false);
 }
 
-static t_count_helper	recursive_count_island(int index, t_pixel *image) {
+static t_count_helper	recursive_count_island(int index, t_pixel *image, int depth) {
 	int				target;
 	t_count_helper	result;
 	t_count_helper	recurs;
+	depth++;
 
 	g_pixel_buffer[index] = false;
 
@@ -19,12 +20,19 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 	result.color.g = image[index].g;
 	result.color.r = image[index].r;
 	result.size = 1;
+	if (depth > MAX_DEPTH)
+	{
+		DEPTH_REACH = true;
+		return result;
+	}
+	else if (DEPTH_REACH == true)
+		return result;
 
 	//up
 	if (index > WIDTH) {
 		target = index - WIDTH;
 		if (g_pixel_buffer[target]) {
-			recurs = recursive_count_island(target, image);
+			recurs = recursive_count_island(target, image, depth);
 			result.x += recurs.x;
 			result.y += recurs.y;
 			result.color.b += recurs.color.b;
@@ -37,7 +45,7 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 	if ((index + 1) % WIDTH) {
 		target = index + 1;
 		if (g_pixel_buffer[target]) {
-			recurs = recursive_count_island(target, image);
+			recurs = recursive_count_island(target, image, depth);
 			result.x += recurs.x;
 			result.y += recurs.y;
 			result.color.b += recurs.color.b;
@@ -50,7 +58,7 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 	if (index % WIDTH) {
 		target = index - 1;
 		if (g_pixel_buffer[target]) {
-			recurs = recursive_count_island(target, image);
+			recurs = recursive_count_island(target, image, depth);
 			result.x += recurs.x;
 			result.y += recurs.y;
 			result.color.b += recurs.color.b;
@@ -63,7 +71,7 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 	if ((index / WIDTH) + 1 < HEIGHT) {
 		target = index + WIDTH;
 		if (g_pixel_buffer[target]) {
-			recurs = recursive_count_island(target, image);
+			recurs = recursive_count_island(target, image, depth);
 			result.x += recurs.x;
 			result.y += recurs.y;
 			result.color.b += recurs.color.b;
@@ -76,7 +84,7 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image) {
 }
 
 t_pos		count_island(int index, t_pixel *image) {
-	t_count_helper	result = recursive_count_island(index, image);
+	t_count_helper	result = recursive_count_island(index, image, depth);
 	t_pos			ret;
 
 	check((result.size == 0), __func__, __LINE__, "division by 0");
@@ -101,6 +109,12 @@ size_t		detect_spots(void *data, void *buffer) {
 	for (i = 0; i < SIZETOTAL; i++) {
 		if (g_pixel_buffer[i])
 			spot_array[return_spot_array_size++] = count_island(i, image);
+	}
+	if (DEPTH_REACH == true) {
+		DEPTH_REACH = false;
+		THRESHOLD++;
+		fprintf(stderr, "Too much pixels parsed, upping threshold to a more estrictive value :\n%i\n", THRESHOLD);
+		return (0);
 	}
 	return (return_spot_array_size);
 }
