@@ -1,4 +1,17 @@
 #include "openimmersion.h"
+#include <fcntl.h>
+
+void	non_blocking_read(int fd)
+{
+	char	buffer[1024];
+	int		flags = fcntl(fd, F_GETFL, 0);
+	size_t	size = 1024;
+
+	bzero(buffer, size);
+	fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+	if (read(fd, buffer, size) != -1)
+		fprintf(stderr, "%s\n", buffer);
+}
 
 int		main(void)
 {
@@ -18,6 +31,7 @@ int		main(void)
 			init_preview();
 			start_capture();
 		}
+		non_blocking_read(1);
 	}
 	return (0);
 }
