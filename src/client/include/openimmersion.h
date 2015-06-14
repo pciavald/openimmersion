@@ -36,6 +36,8 @@ typedef struct in_addr			t_in_addr;
 
 #define SERVER_NAME		"stealth-ubuntu"
 #define SERVER_PORT		42000
+#define SHUTTER_SPEED	(g_cam_options.shutter_speed)
+#define THRESHOLD		(g_cam_options.threshold)
 
 #define CAMERA			MMAL_COMPONENT_DEFAULT_CAMERA
 #define PREVIEW			MMAL_COMPONENT_DEFAULT_VIDEO_RENDERER
@@ -58,9 +60,15 @@ typedef struct				s_data
 	int						fps;
 	int						start;
 	int						connected;
-	int						shutter_speed;
 }							t_data;
 
+typedef struct				s_cam_options
+{
+	int						shutter_speed;
+	int						threshold;
+}							t_cam_options;
+
+t_cam_options	g_cam_options;
 t_data			g_data;
 int				g_status;
 

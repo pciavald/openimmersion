@@ -6,7 +6,10 @@ void	init(void)
 	signal(SIGPIPE, sig_handler);
 	bcm_host_init();
 	bzero((void *)&g_data, sizeof (g_data));
-	fprintf(stderr, "starting program with %ix%i %ifps\n", WIDTH, HEIGHT, FPS);
+	SHUTTER_SPEED = 3000;
+	THRESHOLD = 750;
+	fprintf(stderr, "starting program with %ix%i %ifps shutter:%i\n",
+			WIDTH, HEIGHT, FPS, SHUTTER_SPEED);
 }
 
 void	init_camera(void)

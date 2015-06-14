@@ -17,7 +17,7 @@ void	configure_camera(MMAL_COMPONENT_T * camera)
 		.use_stc_timestamp = MMAL_PARAM_TIMESTAMP_MODE_RESET_STC
 	};
 	mmal_port_parameter_set_uint32(camera->control,
-			MMAL_PARAMETER_SHUTTER_SPEED, g_data.shutter_speed);
+			MMAL_PARAMETER_SHUTTER_SPEED, SHUTTER_SPEED);
 	mmal_port_parameter_set(camera->control, &cam_config.hdr);
 }
 

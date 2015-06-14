@@ -31,7 +31,7 @@ void	non_blocking_read(int fd)
 					buffer + sizeof(SHUTTER_S) - 1);
 			speed = atoi(buffer + sizeof(SHUTTER_S) - 1);
 			if (speed > 0)
-				g_data.shutter_speed = speed;
+				SHUTTER_SPEED = speed;
 			stop_capture();
 			start_capture();
 		}
