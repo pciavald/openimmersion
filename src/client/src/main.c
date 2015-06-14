@@ -10,7 +10,9 @@ void	non_blocking_read(int fd)
 	bzero(buffer, size);
 	fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 	if (read(fd, buffer, size) != -1)
+	{
 		fprintf(stderr, "%s\n", buffer);
+	}
 }
 
 int		main(void)
