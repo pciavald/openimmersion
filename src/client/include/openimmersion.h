@@ -58,6 +58,7 @@ typedef struct				s_data
 	int						fps;
 	int						start;
 	int						connected;
+	int						shutter_speed;
 }							t_data;
 
 t_data			g_data;
