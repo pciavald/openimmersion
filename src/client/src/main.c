@@ -2,6 +2,7 @@
 #include <fcntl.h>
 
 #define SHUTTER_S	"shutter:"
+#define THRESHOLD_S	"threshold:"
 
 void	non_blocking_read(int fd)
 {
@@ -23,7 +24,7 @@ void	non_blocking_read(int fd)
 			fprintf(stderr, "STOP\n");
 			stop_capture();
 		}
-		else if (!strncmp(buffer, SHUTTER_S, sizeof(SHUTTER_S) -1))
+		else if (!strncmp(buffer, SHUTTER_S, sizeof(SHUTTER_S) - 1))
 		{
 			int		speed;
 
@@ -35,8 +36,18 @@ void	non_blocking_read(int fd)
 			stop_capture();
 			start_capture();
 		}
+		else if (!strncmp(buffer, THRESHOLD_S, sizeof(THRESHOLD_S) - 1))
+		{
+			int		thres;
+
+			fprintf(stderr, "set threshold to %s",
+					buffer + sizeof(THRESHOLD_S) - 1);
+			thres = atoi(buffer + sizeof(THRESHOLD_S) - 1);
+			if (thres <= 765 && thres >= 0)
+				THRESHOLD = thres;
+		}
 		else
-			fprintf(stderr, "unknown command: %s\n", buffer);
+			fprintf(stderr, "unknown command: %s", buffer);
 	}
 }
 
