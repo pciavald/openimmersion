@@ -3,16 +3,6 @@
 
 #define SHUTTER_S	"shutter:"
 
-void	start(void)
-{
-	if (g_data.start == 1)
-		return ;
-	g_data.start = 1;
-	init_camera();
-	init_preview();
-	start_capture();
-}
-
 void	non_blocking_read(int fd)
 {
 	char	buffer[1024];
@@ -26,7 +16,7 @@ void	non_blocking_read(int fd)
 		if (!strcmp(buffer, "start\n"))
 		{
 			fprintf(stderr, "START\n");
-			start();
+			start_capture();
 		}
 		else if (!strcmp(buffer, "stop\n"))
 		{
@@ -43,7 +33,7 @@ void	non_blocking_read(int fd)
 			if (speed > 0)
 				g_data.shutter_speed = speed;
 			stop_capture();
-			start();
+			start_capture();
 		}
 		else
 			fprintf(stderr, "unknown command: %s\n", buffer);
