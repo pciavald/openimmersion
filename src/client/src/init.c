@@ -8,8 +8,8 @@ void	init(void)
 	bzero((void *)&g_data, sizeof (g_data));
 	SHUTTER_SPEED = 3000;
 	THRESHOLD = 750;
-	fprintf(stderr, "starting program with %ix%i %ifps shutter:%i\n",
-			WIDTH, HEIGHT, FPS, SHUTTER_SPEED);
+	fprintf(stderr, "starting program with %ix%i %ifps shutter:%i thrs:%i\n",
+			WIDTH, HEIGHT, FPS, SHUTTER_SPEED, THRESHOLD);
 }
 
 void	init_camera(void)

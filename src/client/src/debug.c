@@ -41,27 +41,29 @@ static bool		pixel_is_over_threshold(t_pixel pixel, int threshold) {
 
 void	dump(uint8_t * data, uint32_t length, char * name)
 {
-	int		i;
-	int		fd;
-	mode_t	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
+	int			i;
+	int			fd1;
+	int			fd2;
+	mode_t		mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
 	t_pixel *	img = (t_pixel *)data;
 	t_pixel		empty = {0};
+	char		tname[strlen(name)];
 
 	name[strlen(name) - 1] = '\0';
-	fd = open(name, O_CREAT | O_WRONLY, mode);
-	if (DUMP[0] == 't')
+	strncpy(tname, name, sizeof(tname));
+	tname[strlen(tname)] = 't';
+	fd1 = open(name, O_CREAT | O_WRONLY, mode);
+	fd2 = open(tname, O_CREAT | O_WRONLY, mode);
+	write(fd1, (const void *)data, (size_t)length);
+	for (i = 0; i < SIZETOTAL; i++)
 	{
-		for (i = 0; i < SIZETOTAL; i++)
-		{
-			if (pixel_is_over_threshold(img[i], THRESHOLD))
-				write(fd, (const void *)&(img[i]), sizeof(t_pixel));
-			else
-				write(fd, (const void *)&empty, sizeof(t_pixel));
-		}
+		if (pixel_is_over_threshold(img[i], THRESHOLD))
+			write(fd2, (const void *)&(img[i]), sizeof(t_pixel));
+		else
+			write(fd2, (const void *)&empty, sizeof(t_pixel));
 	}
-	else
-		write(fd, (const void *)data, (size_t)length);
-	close(fd);
+	close(fd1);
+	close(fd2);
 	fprintf(stderr, "wrote file %s\n", DUMP);
 	bzero(DUMP, sizeof(DUMP));
 }

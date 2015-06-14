@@ -35,6 +35,9 @@ typedef struct in_addr			t_in_addr;
 #define SIZETOTAL		307200
 #define FPS				90
 
+#define MAX_DEPTH		10000
+#define DEPTH_REACH		(g_data.depth_reach)
+
 #define SERVER_NAME		"stealth-ubuntu"
 #define SERVER_PORT		42000
 
@@ -64,6 +67,7 @@ typedef struct				s_data
 	int						start;
 	int						connected;
 	char					dump[256];
+	bool					depth_reach;
 }							t_data;
 
 typedef struct				s_cam_options

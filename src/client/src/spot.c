@@ -22,6 +22,7 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image, int dept
 	result.size = 1;
 	if (depth > MAX_DEPTH)
 	{
+		fprintf(stderr, "coucou\n");
 		DEPTH_REACH = true;
 		return result;
 	}
@@ -84,10 +85,9 @@ static t_count_helper	recursive_count_island(int index, t_pixel *image, int dept
 }
 
 t_pos		count_island(int index, t_pixel *image) {
-	t_count_helper	result = recursive_count_island(index, image, depth);
+	t_count_helper	result = recursive_count_island(index, image, 0);
 	t_pos			ret;
 
-	check((result.size == 0), __func__, __LINE__, "division by 0");
 	ret.x = result.x / result.size;
 	ret.y = result.y / result.size;
 	ret.color.b = result.color.b / result.size;
@@ -101,14 +101,31 @@ size_t		detect_spots(void *data, void *buffer) {
 	t_pos	*spot_array = (t_pos *)data;
 	t_pixel	*image = (t_pixel *)buffer;
 	int		i;
+	int		size;
+	t_count_helper	result;
 
 	memset(&g_pixel_buffer, 0, (SIZETOTAL * sizeof(bool)));
 	for (i = 0; i < SIZETOTAL; i++) {
 		g_pixel_buffer[i] = pixel_is_over_threshold(image[i], THRESHOLD);
 	}
 	for (i = 0; i < SIZETOTAL; i++) {
+		if (return_spot_array_size >= MAX_SPOTS)
+			break ;
+		if (DEPTH_REACH == true)
+			break ;
 		if (g_pixel_buffer[i])
-			spot_array[return_spot_array_size++] = count_island(i, image);
+		{
+			result = recursive_count_island(i, image, 0);
+			if (result.size > 10 && result.size < 240)
+			{
+				spot_array[return_spot_array_size].x = result.x / result.size;
+				spot_array[return_spot_array_size].y = result.y / result.size;
+				spot_array[return_spot_array_size].color.b = result.color.b / result.size;
+				spot_array[return_spot_array_size].color.g = result.color.g / result.size;
+				spot_array[return_spot_array_size].color.r = result.color.r / result.size;
+				return_spot_array_size++;
+			}
+		}
 	}
 	if (DEPTH_REACH == true) {
 		DEPTH_REACH = false;
@@ -116,5 +133,6 @@ size_t		detect_spots(void *data, void *buffer) {
 		fprintf(stderr, "Too much pixels parsed, upping threshold to a more estrictive value :\n%i\n", THRESHOLD);
 		return (0);
 	}
+
 	return (return_spot_array_size);
 }
