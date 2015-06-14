@@ -8,6 +8,7 @@ void	start(void)
 	if (g_data.start == 1)
 		return ;
 	g_data.start = 1;
+	g_stop = 0;
 	init_camera();
 	init_preview();
 	start_capture();

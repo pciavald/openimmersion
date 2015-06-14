@@ -40,9 +40,9 @@ static void		send_new_buffer_to_port(MMAL_POOL_T * pool, MMAL_PORT_T * port)
 	new_buffer = mmal_queue_get(pool->queue);
 	if (new_buffer && port->is_enabled)
 		g_status = mmal_port_send_buffer(port, new_buffer);
-	else
-		check(-1, __func__, __LINE__, "Unable to get new buffer");
-	check(g_status, __func__, __LINE__, "Unable to send new buffer");
+	//else
+	//	check(-1, __func__, __LINE__, "Unable to get new buffer");
+	//check(g_status, __func__, __LINE__, "Unable to send new buffer");
 }
 
 void	video_buffer_callback(MMAL_PORT_T * port, MMAL_BUFFER_HEADER_T * buffer)

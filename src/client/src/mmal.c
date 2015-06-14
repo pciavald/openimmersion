@@ -16,11 +16,6 @@ void	start_capture(void)
 {
 	MMAL_PORT_T *	video = g_data.camera_video_port;
 
-	if (g_data.start == 1)
-		return ;
-	g_data.start = 1;
-	init_camera();
-	init_preview();
 	fprintf(stderr, "starting video\n");
 	g_status = mmal_port_parameter_set_boolean(video, MMAL_PARAMETER_CAPTURE, 1);
 	check(g_status, __func__, __LINE__, "starting capture");
