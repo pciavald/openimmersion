@@ -63,7 +63,6 @@ typedef struct				s_data
 
 t_data			g_data;
 int				g_status;
-int				g_stop;
 
 /* commit_ports.c */
 void	set_preview_port(MMAL_PORT_T * camera_preview_port);

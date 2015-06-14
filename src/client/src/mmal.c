@@ -25,7 +25,6 @@ void	stop_capture(void)
 {
 	MMAL_PORT_T *	video = g_data.camera_video_port;
 
-	g_stop = 1;
 	g_data.start = 0;
 	g_status = mmal_port_parameter_set_boolean(video, MMAL_PARAMETER_CAPTURE, 0);
 	check(g_status, __func__, __LINE__, "starting capture");

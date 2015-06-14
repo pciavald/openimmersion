@@ -4,7 +4,6 @@ void	init(void)
 {
 	signal(SIGINT, sig_handler);
 	signal(SIGPIPE, sig_handler);
-	g_stop = 0;
 	bcm_host_init();
 	bzero((void *)&g_data, sizeof (g_data));
 	fprintf(stderr, "starting program with %ix%i %ifps\n", WIDTH, HEIGHT, FPS);
