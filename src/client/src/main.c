@@ -3,6 +3,7 @@
 
 #define SHUTTER_S	"shutter:"
 #define THRESHOLD_S	"threshold:"
+#define DUMP_S		"dump:"
 
 void	non_blocking_read(int fd)
 {
@@ -46,6 +47,8 @@ void	non_blocking_read(int fd)
 			if (thres <= 765 && thres >= 0)
 				THRESHOLD = thres;
 		}
+		else if (!strncmp(buffer, DUMP_S, sizeof(DUMP_S) - 1))
+			strncpy(DUMP, buffer + sizeof(DUMP_S) - 1, sizeof(DUMP));
 		else
 			fprintf(stderr, "unknown command: %s", buffer);
 	}

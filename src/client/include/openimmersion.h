@@ -32,12 +32,15 @@ typedef struct in_addr			t_in_addr;
 
 #define WIDTH			640
 #define HEIGHT			480
+#define SIZETOTAL		307200
 #define FPS				90
 
 #define SERVER_NAME		"stealth-ubuntu"
 #define SERVER_PORT		42000
+
 #define SHUTTER_SPEED	(g_cam_options.shutter_speed)
 #define THRESHOLD		(g_cam_options.threshold)
+#define DUMP			(g_data.dump)
 
 #define CAMERA			MMAL_COMPONENT_DEFAULT_CAMERA
 #define PREVIEW			MMAL_COMPONENT_DEFAULT_VIDEO_RENDERER
@@ -60,6 +63,7 @@ typedef struct				s_data
 	int						fps;
 	int						start;
 	int						connected;
+	char					dump[256];
 }							t_data;
 
 typedef struct				s_cam_options
@@ -107,7 +111,7 @@ void	init_preview(void);
 /* debug.c */
 void	sig_handler(int sig);
 void	check(int status, const char * func, int line, char * msg);
-void	dump(uint8_t * data, uint32_t length);
+void	dump(uint8_t * data, uint32_t length, char * name);
 void	update_fps(void);
 
 /* callback.c */

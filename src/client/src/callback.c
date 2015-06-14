@@ -23,8 +23,8 @@ static void		use_buffer(uint8_t * buffer, uint32_t buffer_length, int frame)
 	t_packet	pack;
 
 	// dump a BGR888 frame
-	if (frame == -1)
-		dump(buffer, buffer_length);
+	if (*DUMP)
+		dump(buffer, buffer_length, DUMP);
 
 	bzero(&pack, sizeof (pack));
 	pack.header.elems = detect_spots(pack.data, buffer);
